@@ -67,7 +67,7 @@ Each queue entry file is named per the following template:
 A queue-entry file contains a single line of comma-separated values
 that conform to the following template:
 
-`<command>,<absolute path to file being managed>`
+`<command>,<absolute path to file being managed>`  
 `<command>` must be either `add` or `rm`
 
 
