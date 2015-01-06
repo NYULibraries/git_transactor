@@ -24,19 +24,19 @@ in development
 ## Execution Overview
 
 When the script executes, it checks for "queue entry files" in the
-`queue/` directory.
+`work/queue/` directory.
 
-If the `queue/` directory is empty the script simply terminates with
+If the `work/queue/` directory is empty the script simply terminates with
 an exit status of `0`.
 
-If the `queue/` directory is not empty, the script processes each
+If the `work/queue/` directory is not empty, the script processes each
 queue entry file in the order of the queue entry filenames from lowest
 to highest, committing each change to the local repository.
 
-If a commit is successful, the queue entry file is moved to the `processed/`
-subdirectory.
+If a commit is successful, the queue entry file is moved to the
+`work/processed/` subdirectory.
 
-If a commit fails, the queue entry file is moved to the `error`
+If a commit fails, the queue entry file is moved to the `work/error`
 subdirectory.
 
 After all commits have been made to the local repository, the updated
@@ -47,7 +47,6 @@ with an exit status of `0`.
 
 If any error occurred during processing queue entries, or on the push
 to the remote repo, the script terminates with an exit status of `1`.
-
 
 
 ## Queue Entry Files
@@ -69,7 +68,6 @@ A queue-entry file contains a single line of comma-separated values
 that conform to the following template:
 
 `<command>,<absolute path to file being managed>`
-
 `<command>` must be either `add` or `rm`
 
 
