@@ -13,7 +13,8 @@ repository.
 * A git client is installed on the system.
 * The user running the script has write privileges
   on both the local and remote repositories.
-* read privileges on files being added to the local repository.
+* The user running the script has read privileges on files being added
+  to the local repository.
 
 
 ## Status
@@ -25,8 +26,8 @@ in development
 When the script executes, it checks for "queue entry files" in the
 `queue/` directory.
 
-If the `queue/` directory is empty the script simply terminates with a
-0 exit status
+If the `queue/` directory is empty the script simply terminates with
+an exit status of `0`.
 
 If the `queue/` directory is not empty, the script processes each
 queue entry file in the order of the queue entry filenames from lowest
@@ -41,11 +42,12 @@ subdirectory.
 After all commits have been made to the local repository, the updated
 local repository is pushed to the remote repository.
 
-Upon a successful push to the remote repository, the script exits with
-a 0 status.
+Upon a successful push to the remote repository, the script terminates
+with an exit status of `0`.
 
 If any error occurred during processing queue entries, or on the push
-to the remote repo, the script exits with a 1 status.
+to the remote repo, the script terminates with an exit status of `1`.
+
 
 
 ## Queue Entry Files
