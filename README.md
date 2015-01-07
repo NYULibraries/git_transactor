@@ -1,4 +1,4 @@
-git-transactor
+git_transactor
 ==============
 
 ## Overview
