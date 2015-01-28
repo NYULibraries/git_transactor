@@ -1,15 +1,17 @@
 class TestRepo
-  def initialize(path = 'tmp/repo')
-    @path = path
+  attr_reader :rel_path
+
+  def initialize(rel_path = 'tmp/repo')
+    @rel_path = rel_path
   end
 
   def nuke
-    FileUtils.rm_rf(@path) if File.exists?(@path)
+    FileUtils.rm_rf(@rel_path) if File.directory?(@rel_path)
   end
   def init
-    FileUtils.mkdir(@path)
-    g = Git.init(@path)
-    dummy_file = "#{@path}/foo.txt"
+    FileUtils.mkdir(@rel_path)
+    g = Git.init(@rel_path)
+    dummy_file = "#{@rel_path}/foo.txt"
     File.open(dummy_file, 'w') {|f| f.puts(dummy_file)}
     g.add(File.basename(dummy_file))
     g.commit('Initial commit')
