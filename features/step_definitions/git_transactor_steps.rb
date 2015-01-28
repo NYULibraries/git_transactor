@@ -1,15 +1,17 @@
 Given(/^that the git repository exists$/) do
-  repo = TestRepo.new
-  repo.nuke
-  repo.init
-end
-
-Given(/^a file to be added to the repo exists$/) do
-  pending # express the regexp above with the code you wish you had
+  @repo = TestRepo.new
+  @repo.nuke
+  @repo.init
 end
 
 Given(/^a source\-file directory exists$/) do
-  pending # express the regexp above with the code you wish you had
+  @src_dir = TestSourceDir.new
+  @src_dir.nuke
+  @src_dir.init
+end
+
+Given(/^a file to be added to the repo exists$/) do
+  @src_dir.create_file('foo.txt', 'whoa! this is SO foo!')
 end
 
 Given(/^the source\-file does not exist in the git repository$/) do
