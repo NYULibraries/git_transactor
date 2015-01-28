@@ -11,15 +11,23 @@ Given(/^a source\-file directory exists$/) do
 end
 
 Given(/^a file to be added to the repo exists$/) do
-  @src_dir.create_file('foo.txt', 'whoa! this is SO foo!')
+  @src_file = "#{Random.rand 99999}.txt"
+  @src_dir.create_file(@src_file, 'whoa! this is SO foo!')
 end
 
 Given(/^the source\-file does not exist in the git repository$/) do
-  pending # express the regexp above with the code you wish you had
+  g = Git.open(@repo.path)
+  match = g.status.select {|x| x.path == @src_file }
+  raise "expecting #{@src_file} to be untracked" unless match.empty?
 end
 
 Given(/^there is an add\-request for the file$/) do
-  pending # express the regexp above with the code you wish you had
+  queue_dir = 'work/queue'
+  request_fname = "#{Time.now.strftime("%Y%m%d%H%M%S")}.csv"
+  path = File.join(File.expand_path(@src_dir.path), @src_file)
+  File.open(File.join(queue_dir, request_fname), 'w') do |f|
+    f.puts("add,#{path}")
+  end
 end
 
 When(/^I process the add\-request$/) do

@@ -1,17 +1,17 @@
 class TestSourceDir
-  attr_reader :rel_path
+  attr_reader :path
 
-  def initialize(rel_path = 'tmp/source')
-    @rel_path = rel_path
+  def initialize(path = 'tmp/source')
+    @path = path
   end
 
   def nuke
-    FileUtils.rm_rf(@rel_path) if File.directory?(@rel_path)
+    FileUtils.rm_rf(@path) if File.directory?(@path)
   end
   def init
-    FileUtils.mkdir(@rel_path)
+    FileUtils.mkdir(@path)
   end
   def create_file(fname, msg)
-    File.open(File.join(@rel_path, fname), 'w') {|f| f.puts(msg)}
+    File.open(File.join(@path, fname), 'w') {|f| f.puts(msg)}
   end
 end
