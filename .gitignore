@@ -3,6 +3,7 @@
 /.bundle/
 /lib/bundler/man/
 /tmp/repo/
+/tmp/source/
 
 Gemfile.lock
 .ruby-version
