@@ -18,7 +18,7 @@ end
 Given(/^the source\-file does not exist in the git repository$/) do
   g = Git.open(@repo.path)
   match = g.status.select {|x| x.path == @src_file }
-  raise "expecting #{@src_file} to be untracked" unless match.empty?
+  expect(match).to be_empty
 end
 
 Given(/^there is an add\-request for the file$/) do
