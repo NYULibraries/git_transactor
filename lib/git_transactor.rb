@@ -1,5 +1,2 @@
-require "git_transactor/version"
-
-module GitTransactor
-  # Your code goes here...
-end
+require 'git_transactor/version'
+require 'git_transactor/request_queue'

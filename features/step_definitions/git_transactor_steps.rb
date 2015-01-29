@@ -31,11 +31,14 @@ Given(/^there is an add\-request for the file$/) do
 end
 
 When(/^I process the add\-request$/) do
-  pending # express the regexp above with the code you wish you had
+  rq = GitTransactor::RequestQueue.new
+  rq.process
 end
 
 Then(/^I should see the file in the repository$/) do
-  pending # express the regexp above with the code you wish you had
+  g = Git.open(@repo.path)
+  match = g.status.select {|x| x.path == @src_file }
+  expect(match).to_not be_empty
 end
 
 Then(/^I should see "(.*?)" in the commit log$/) do |arg1|
