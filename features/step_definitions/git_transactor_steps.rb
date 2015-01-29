@@ -23,7 +23,7 @@ end
 
 Given(/^there is an add\-request for the file$/) do
   queue_dir = 'work/queue'
-  request_fname = "#{Time.now.strftime("%Y%m%d%H%M%S")}.csv"
+  request_fname = "#{Time.now.strftime("%Y%m%dT%H%M%S")}.csv"
   path = File.join(File.expand_path(@src_dir.path), @src_file)
   File.open(File.join(queue_dir, request_fname), 'w') do |f|
     f.puts("add,#{path}")
