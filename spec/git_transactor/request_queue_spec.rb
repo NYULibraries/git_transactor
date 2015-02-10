@@ -6,7 +6,8 @@ module GitTransactor
     it { is_expected.to be_a(GitTransactor::RequestQueue) }
 
     context "with an empty queue" do
-#      its(:process) { is_expected.to be_true }
+      subject { RequestQueue.new.process }
+      it { should == 0 }
     end
   end
 end
