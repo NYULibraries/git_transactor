@@ -31,8 +31,10 @@ Given(/^there is an add\-request for the file$/) do
 end
 
 When(/^I process the add\-request$/) do
-  rq = GitTransactor::RequestQueue.new
-  rq.process
+  gt = GitTransactor::Base.new(repo_path:   @repo.path,
+                               source_path: @src_dir.path,
+                               transactor_root: 'features/fixtures/work')
+  gt.process_queue
 end
 
 Then(/^I should see the file in the repository$/) do

@@ -1,7 +1,7 @@
 class TestRepo
   attr_reader :path
 
-  def initialize(path = 'tmp/repo')
+  def initialize(path = 'features/fixtures/repo')
     @path = path
   end
 

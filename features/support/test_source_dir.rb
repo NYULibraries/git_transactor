@@ -1,7 +1,7 @@
 class TestSourceDir
   attr_reader :path
 
-  def initialize(path = 'tmp/source')
+  def initialize(path = 'features/fixtures/source')
     @path = path
   end
 
