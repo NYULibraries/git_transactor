@@ -4,6 +4,10 @@
 /lib/bundler/man/
 /tmp/repo/
 /tmp/source
+/spec/fixtures/repo/
+/spec/fixtures/source/
+/features/fixtures/repo/
+/features/fixtures/source/
 
 /work/queue/*
 /work/processed/*
