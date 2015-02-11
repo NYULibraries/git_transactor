@@ -6,6 +6,7 @@ module GitTransactor
     let(:valid_entry)  { File.join(fixture_root, 'valid-entry.csv') }
     let(:multi_line_entry)  { File.join(fixture_root, 'multi-line-entry.csv') }
     let(:bad_action_entry)  { File.join(fixture_root, 'bad-action-entry.csv') }
+    let(:bad_delimiter_entry) { File.join(fixture_root, 'bad-delimiter-entry.csv') }
 
     context "when class is instantiated" do
       subject { QueueEntry.new(valid_entry) }
@@ -29,6 +30,12 @@ module GitTransactor
     context "when given a invalid action entry file" do
       it "should raise an ArgumentError" do
         expect{ QueueEntry.new(bad_action_entry) }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when given a invalid delimiter file" do
+      it "should raise an ArgumentError" do
+        expect{ QueueEntry.new(bad_delimiter_entry) }.to raise_error(ArgumentError)
       end
     end
   end
