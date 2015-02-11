@@ -31,7 +31,15 @@ module GitTransactor
       #   file specified in delete request not present in repo
       #   copy file fails during add
       #   git blows up (git add, git rm, git commit)
-      0
+      num_processed = 0
+      Dir.glob(File.join(@work_root, 'queue', '*.csv')) .each do |entry|
+        puts entry
+        num_processed += 1
+      end
+      num_processed
+    end
+    private
+    def process_entry
     end
   end
 end
