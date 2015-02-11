@@ -16,7 +16,21 @@ module GitTransactor
       @repo = Git.open(@repo_path)
     end
 
+    # returns number of requests processed
     def process_queue
+      # open queue directory
+      # for each request
+      #   if add
+      #     find file in source directory
+      #     copy file from source directory into corresponding repo directory
+      #     add the file to the repo
+      #     commit the change with the proper commit message
+      #
+      # error cases:
+      #   file specified in add    request not present in source dir
+      #   file specified in delete request not present in repo
+      #   copy file fails during add
+      #   git blows up (git add, git rm, git commit)
       0
     end
   end
