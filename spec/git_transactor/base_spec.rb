@@ -27,16 +27,18 @@ module GitTransactor
     end
 
     context "with a single 'add' request in the queue" do
-      let(:src_file) { "#{Random.rand 99999}.txt" }
+      let(:sub_directory) { 'jgp' }
+      let(:src_file) { "interesting-stuff.xml" }
       before(:each) do
         tsd = TestSourceDir.new(source_path)
         tsd.nuke
         tsd.init
-        tsd.create_file(src_file, "#{src_file}")
+        tsd.create_sub_directory(sub_directory)
+        tsd.create_file(File.join(sub_directory, src_file), "#{src_file}")
         tq = TestQueue.new(work_root)
         tq.nuke
         tq.init
-        tq.enqueue('add', File.expand_path(File.join(tsd.path, src_file)))
+        tq.enqueue('add', File.expand_path(File.join(tsd.path, sub_directory, src_file)))
       end
       subject { base.process_queue }
       it { should == 1 }
