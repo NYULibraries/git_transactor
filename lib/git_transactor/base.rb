@@ -48,7 +48,6 @@ module GitTransactor
         else
           raise ArgumentError.new("unrecognized action: #{qe.action}")
         end
-        puts "---> #{entry_file}"
         FileUtils.mv(entry_file, File.join(@work_root, 'processed'))
         num_processed += 1
       end
