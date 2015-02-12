@@ -9,6 +9,9 @@ module GitTransactor
         @action, @path = lines[0].chomp.split(',',2)
         raise ArgumentError.new("Invalid action: #{@action}") unless ALLOWABLE_ACTIONS.include?(@action)
       end
+      def add?
+        @action == 'add'
+      end
     end
   end
 end
