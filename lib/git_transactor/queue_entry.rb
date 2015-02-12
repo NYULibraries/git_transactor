@@ -12,6 +12,9 @@ module GitTransactor
       def add?
         @action == 'add'
       end
+      def rm?
+        @action == 'rm'
+      end
     end
   end
 end

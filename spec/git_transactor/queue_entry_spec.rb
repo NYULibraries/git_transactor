@@ -59,5 +59,20 @@ module GitTransactor
         end
       end
     end
+
+    describe "#rm?" do
+      context "when instantiated with a valid rm-entry file" do
+        subject(:qe) { QueueEntry.new(rm_entry) }
+        it "should be true" do
+          expect(qe).to be_rm
+        end
+      end
+      context "when instantiated with a valid add-entry file" do
+        subject(:qe) { QueueEntry.new(add_entry) }
+        it "should be false" do
+          expect(qe).not_to be_rm
+        end
+      end
+    end
   end
 end
