@@ -6,8 +6,10 @@
 /tmp/source
 /spec/fixtures/repo/
 /spec/fixtures/source/
+/spec/fixtures/work/
 /features/fixtures/repo/
 /features/fixtures/source/
+/features/fixtures/work/
 
 /work/queue/*
 /work/processed/*
