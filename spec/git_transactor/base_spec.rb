@@ -22,14 +22,16 @@ module GitTransactor
         tr = TestRepo.new(repo_path);  tr.nuke; tr.init
         tq = TestQueue.new(work_root); tq.nuke; tq.init
       end
-      subject { base.process_queue }
-      it { should == 0 }
+      it "should return the correct number of entries processed" do
+        expect(base.process_queue).to be == 0
+      end
     end
 
     context "with a single 'add' request in the queue" do
       let(:sub_directory) { 'jgp' }
       let(:src_file) { "interesting-stuff.xml" }
       before(:each) do
+        tr  = TestRepo.new(repo_path);  tr.nuke; tr.init
         tsd = TestSourceDir.new(source_path)
         tsd.nuke
         tsd.init
@@ -40,8 +42,13 @@ module GitTransactor
         tq.init
         tq.enqueue('add', File.expand_path(File.join(tsd.path, sub_directory, src_file)))
       end
-      subject { base.process_queue }
-      it { should == 1 }
+      it "should return the correct number of entries processed" do
+        expect(base.process_queue).to be == 1
+      end
+      it "should move the queue-entry file to the processed directory" do
+        base.process_queue
+        expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 1
+      end
     end
   end
 end
