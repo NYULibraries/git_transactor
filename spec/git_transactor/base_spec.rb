@@ -50,5 +50,30 @@ module GitTransactor
         expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 1
       end
     end
+
+    context "with a single 'rm' request in the queue" do
+      let(:sub_directory) { 'pgj' }
+      let(:file_to_rm) { "spiffingly-interesting.xml" }
+      let(:file_to_rm_rel_path) {File.join(sub_directory, file_to_rm)}
+      before(:each) do
+        tr  = TestRepo.new(repo_path);  tr.nuke; tr.init
+        tr.create_sub_directory(sub_directory)
+        tr.create_file(file_to_rm_rel_path, "#{file_to_rm}")
+        g = Git.open(repo_path)
+        g.add(file_to_rm_rel_path)
+        g.commit("add test file")
+        tq = TestQueue.new(work_root)
+        tq.nuke
+        tq.init
+        tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
+      end
+      it "should return the correct number of entries processed" do
+        expect(base.process_queue).to be == 1
+      end
+      it "should move the queue-entry file to the processed directory" do
+        base.process_queue
+        expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 1
+      end
+    end
   end
 end
