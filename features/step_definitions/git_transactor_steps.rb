@@ -67,7 +67,10 @@ Given(/^the source\-file to be removed exists in the git repository$/) do
 end
 
 Given(/^there is an rm\-request for the file$/) do
-  pending # express the regexp above with the code you wish you had
+  tq = TestQueue.new(@work_root); tq.nuke; tq.init
+  # N.B. the application doing the enqueuing will provide the path of the
+  #      _original_ source file.
+  tq.enqueue('rm', File.expand_path(File.join(@src_dir.path, @file_to_rm_rel_path)))
 end
 
 When(/^I process the rm\-request$/) do
