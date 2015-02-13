@@ -21,6 +21,9 @@ module GitTransactor
         it "should have the correct path" do
           expect(qe.path).to be == '/Users/jgp/tmp/4b3f99d8-a714-4d9c-9109-2ed5fb6d8ab4.txt'
         end
+        it "should have the correct entry_path" do
+          expect(qe.entry_path).to be == add_entry
+        end
       end
 
       context "when instantiated with a multi-line entry file" do
