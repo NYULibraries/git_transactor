@@ -53,7 +53,7 @@ to the remote repo, the script terminates with an exit status of `1`.
 
 Each queue entry file is named per the following template:
 ```
-<YYYYMMDDTHHMMSS.csv>, where:
+<YYYYMMDDTHHMMSSUUUUUU.csv>, where:
   * YYYY = current year
   * MM   = current month,  zero-padded, range: 01-12
   * DD   = current day,    zero-padded  range: 01-31
@@ -61,13 +61,11 @@ Each queue entry file is named per the following template:
   * HH   = current hour,   zero-padded  range: 00-23 (note 24-hour format)
   * MM   = current minute, zero-padded, range: 00-59
   * SS   = current second, zero-padded, range: 00-59
-
-  e.g., 20150106T172954.csv
+  * UUUUUU = current microsecond, zero-padded, range: 000000-999999
+  e.g., 20150213T152104253091.csv
 ```
 A queue-entry file contains a single line of comma-separated values
 that conform to the following template:
 
-`<command>,<absolute path to file being managed>`  
+`<command>,<absolute path to file being managed>`
 `<command>` must be either `add` or `rm`
-
-
