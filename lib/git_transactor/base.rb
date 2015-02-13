@@ -45,6 +45,7 @@ module GitTransactor
         @qe = QueueEntry.new(entry_file)
         case
         when @qe.add? then process_add_entry
+        when @qe.rm?  then process_rm_entry
         else
           raise ArgumentError.new("unrecognized action: #{@qe.action}")
         end
@@ -55,6 +56,13 @@ module GitTransactor
       copy_src_file_to_repo
       git_add_file_to_repo
       update_commit_msg_for_add_entry
+      disposition_entry_file
+      update_num_processed
+    end
+    def process_rm_entry
+      setup_paths
+      git_rm_file_from_repo
+      update_commit_msg_for_rm_entry
       disposition_entry_file
       update_num_processed
     end
@@ -77,6 +85,12 @@ module GitTransactor
     end
     def update_commit_msg_for_add_entry
       @commit_msg += "Updating file #{@file_rel_path}"
+    end
+    def git_rm_file_from_repo
+      @repo.remove(@file_rel_path)
+    end
+    def update_commit_msg_for_rm_entry
+      @commit_msg += "Deleting file #{@file_rel_path}"
     end
     def disposition_entry_file
       FileUtils.mv(@qe.entry_path, File.join(@work_root, 'processed'))

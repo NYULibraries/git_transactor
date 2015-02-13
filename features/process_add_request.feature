@@ -9,7 +9,7 @@ Feature: process add-file-request
     And   a source-file directory exists
     And   a file to be added to the repo exists
     And   the source-file does not exist in the git repository
-    And   there is an add-request for the file
-    When  I process the add-request
+    And   there is an add-request for the file in the queue
+    When  I process the queue
     Then  I should see the file in the repository
     And   I should see "Updating file" in the commit log
