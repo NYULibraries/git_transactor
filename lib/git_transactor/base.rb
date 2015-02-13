@@ -55,7 +55,7 @@ module GitTransactor
       copy_src_file_to_repo
       git_add_file_to_repo
       update_commit_msg_for_add_entry
-      relocate_entry_file
+      disposition_entry_file
       update_num_processed
     end
     def queue_entry_files
@@ -78,7 +78,7 @@ module GitTransactor
     def update_commit_msg_for_add_entry
       @commit_msg += "Updating file #{@file_rel_path}"
     end
-    def relocate_entry_file
+    def disposition_entry_file
       FileUtils.mv(@qe.entry_path, File.join(@work_root, 'processed'))
     end
     def update_num_processed
