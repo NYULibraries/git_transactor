@@ -50,3 +50,30 @@ Then(/^I should see "(.*?)" in the commit log$/) do |arg1|
   g = Git.open(@repo.path)
   expect(g.log[0].message).to include("Updating file #{@src_file_rel_path}")
 end
+
+Given(/^the source\-file to be removed exists in the git repository$/) do
+  @file_to_rm = 'file-to-rm.xml'
+  @sub_dir    = 'quux'
+  FileUtils.mkdir(File.join(@repo.path, @sub_dir))
+  @file_to_rm_rel_path = File.join(@sub_dir, @file_to_rm)
+  File.open(File.join(@repo.path, @file_to_rm_rel_path), "w") do |f|
+    f.puts("#{@file_to_rm_rel_path}")
+  end
+  g = Git.open(@repo.path)
+  g.add(@file_to_rm_rel_path)
+  g.commit("adding test file: #{@file_to_rm_rel_path}")
+  match = g.status.select {|x| x.path == @file_to_rm_rel_path }
+  expect(match).to_not be_empty
+end
+
+Given(/^there is an rm\-request for the file$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+When(/^I process the rm\-request$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I should not see the file in the repository$/) do
+  pending # express the regexp above with the code you wish you had
+end
