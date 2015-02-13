@@ -32,6 +32,12 @@ module GitTransactor
       tq.enqueue('add', File.expand_path(File.join(tsd.path, sub_directory, src_file)))
     end
 
+    def setup_add_state_2
+      tsd.create_sub_directory(sub_directory_2)
+      tsd.create_file(File.join(sub_directory_2, src_file_2), "#{src_file_2}")
+      tq.enqueue('add', File.expand_path(File.join(tsd.path, sub_directory_2, src_file_2)))
+    end
+
     def setup_rm_state
       tr.create_sub_directory(sub_directory)
       tr.create_file(file_to_rm_rel_path, "#{file_to_rm}")
@@ -72,6 +78,12 @@ module GitTransactor
         base.process_queue
         expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 1
       end
+
+      it "should have the correct commit message" do
+        base.process_queue
+        g = Git.open(repo_path)
+        expect(g.log[0].message).to be == 'Updating file jgp/interesting-stuff.xml'
+      end
     end
 
 
@@ -91,6 +103,38 @@ module GitTransactor
       it "should move the queue-entry file to the processed directory" do
         base.process_queue
         expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 1
+      end
+
+      it "should have the correct commit message" do
+        base.process_queue
+        g = Git.open(repo_path)
+        expect(g.log[0].message).to be == 'Deleting file pgj/spiffingly-interesting.xml'
+      end
+    end
+
+    context "with two 'add' requests in the queue" do
+      let(:sub_directory) { 'jgp' }
+      let(:src_file) { "interesting-stuff.xml" }
+      let(:sub_directory_2) { 'khq' }
+      let(:src_file_2) { "more-interesting-stuff.xml" }
+      before(:each) do
+        setup_add_state
+        setup_add_state_2
+      end
+
+      it "should return the correct number of entries processed" do
+        expect(base.process_queue).to be == 2
+      end
+
+      it "should move the queue-entry file to the processed directory" do
+        base.process_queue
+        expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 2
+      end
+
+      it "should have the correct commit message" do
+        base.process_queue
+        g = Git.open(repo_path)
+        expect(g.log[0].message).to be == 'Updating file jgp/interesting-stuff.xml, Updating file khq/more-interesting-stuff.xml'
       end
     end
 

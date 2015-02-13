@@ -84,19 +84,22 @@ module GitTransactor
       @repo.add(@file_rel_path)
     end
     def update_commit_msg_for_add_entry
-      @commit_msg += "Updating file #{@file_rel_path}"
+      @commit_msg += (delimiter + "Updating file #{@file_rel_path}")
     end
     def git_rm_file_from_repo
       @repo.remove(@file_rel_path)
     end
     def update_commit_msg_for_rm_entry
-      @commit_msg += "Deleting file #{@file_rel_path}"
+      @commit_msg += (delimiter + "Deleting file #{@file_rel_path}")
     end
     def disposition_entry_file
       FileUtils.mv(@qe.entry_path, File.join(@work_root, 'processed'))
     end
     def update_num_processed
       @num_processed += 1
+    end
+    def delimiter
+      @commit_msg.empty? ? '' : ', '
     end
   end
 end
