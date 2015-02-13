@@ -46,9 +46,9 @@ Then(/^I should see the file in the repository$/) do
   expect(match).to_not be_empty
 end
 
-Then(/^I should see "(.*?)" in the commit log$/) do |arg1|
+Then(/^I should see "(.*?)" in the commit log$/) do |msg|
   g = Git.open(@repo.path)
-  expect(g.log[0].message).to include("Updating file #{@src_file_rel_path}")
+  expect(g.log[0].message).to include(msg)
 end
 
 Given(/^the source\-file to be removed exists in the git repository$/) do
@@ -75,5 +75,7 @@ end
 
 
 Then(/^I should not see the file in the repository$/) do
-  pending # express the regexp above with the code you wish you had
+  g = Git.open(@repo.path)
+  match = g.status.select {|x| x.path == @file_to_rm_rel_path }
+  expect(match).to be_empty
 end
