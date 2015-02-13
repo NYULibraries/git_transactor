@@ -1,13 +1,6 @@
-class TestRepo
+class TestRepo < TestDir
   attr_reader :path
 
-  def initialize(path = 'features/fixtures/repo')
-    @path = path
-  end
-
-  def nuke
-    FileUtils.rm_rf(@path) if File.directory?(@path)
-  end
   def init
     FileUtils.mkdir(@path)
     g = Git.init(@path)
