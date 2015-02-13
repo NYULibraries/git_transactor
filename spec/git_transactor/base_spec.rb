@@ -31,15 +31,13 @@ module GitTransactor
       let(:sub_directory) { 'jgp' }
       let(:src_file) { "interesting-stuff.xml" }
       before(:each) do
-        tr  = TestRepo.new(repo_path);  tr.nuke; tr.init
-        tsd = TestSourceDir.new(source_path)
-        tsd.nuke
-        tsd.init
+        tr  = TestRepo.new(repo_path); tr.nuke; tr.init
+
+        tsd = TestSourceDir.new(source_path); tsd.nuke; tsd.init
         tsd.create_sub_directory(sub_directory)
         tsd.create_file(File.join(sub_directory, src_file), "#{src_file}")
-        tq = TestQueue.new(work_root)
-        tq.nuke
-        tq.init
+
+        tq = TestQueue.new(work_root); tq.nuke; tq.init
         tq.enqueue('add', File.expand_path(File.join(tsd.path, sub_directory, src_file)))
       end
       it "should return the correct number of entries processed" do
@@ -59,12 +57,12 @@ module GitTransactor
         tr  = TestRepo.new(repo_path);  tr.nuke; tr.init
         tr.create_sub_directory(sub_directory)
         tr.create_file(file_to_rm_rel_path, "#{file_to_rm}")
+
         g = Git.open(repo_path)
         g.add(file_to_rm_rel_path)
         g.commit("add test file")
-        tq = TestQueue.new(work_root)
-        tq.nuke
-        tq.init
+
+        tq = TestQueue.new(work_root); tq.nuke; tq.init
         tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
       end
       it "should return the correct number of entries processed" do
