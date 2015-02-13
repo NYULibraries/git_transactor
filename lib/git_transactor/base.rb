@@ -54,7 +54,7 @@ module GitTransactor
       create_repo_subdir_if_needed
       copy_src_file_to_repo
       git_add_file_to_repo
-      update_commit_msg_with_add
+      update_commit_msg_for_add_entry
       relocate_entry_file
       update_num_processed
     end
@@ -75,7 +75,7 @@ module GitTransactor
     def git_add_file_to_repo
       @repo.add(@file_rel_path)
     end
-    def update_commit_msg_with_add
+    def update_commit_msg_for_add_entry
       @commit_msg += "Updating file #{@file_rel_path}"
     end
     def relocate_entry_file
