@@ -33,7 +33,7 @@ Given(/^there is an add\-request for the file$/) do
   tq.enqueue('add', File.expand_path(File.join(@src_dir.path, @src_file_rel_path)))
 end
 
-When(/^I process the add\-request$/) do
+When(/^I process the queue$/) do
   gt = GitTransactor::Base.new(repo_path:   @repo.path,
                                source_path: @src_dir.path,
                                work_root:   @work_root)
@@ -73,9 +73,6 @@ Given(/^there is an rm\-request for the file$/) do
   tq.enqueue('rm', File.expand_path(File.join(@src_dir.path, @file_to_rm_rel_path)))
 end
 
-When(/^I process the rm\-request$/) do
-  pending # express the regexp above with the code you wish you had
-end
 
 Then(/^I should not see the file in the repository$/) do
   pending # express the regexp above with the code you wish you had
