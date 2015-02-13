@@ -28,7 +28,7 @@ Given(/^the source\-file does not exist in the git repository$/) do
   expect(match).to be_empty
 end
 
-Given(/^there is an add\-request for the file$/) do
+Given(/^there is an add\-request for the file in the queue$/) do
   tq = TestQueue.new(@work_root); tq.nuke; tq.init
   tq.enqueue('add', File.expand_path(File.join(@src_dir.path, @src_file_rel_path)))
 end
@@ -66,7 +66,7 @@ Given(/^the source\-file to be removed exists in the git repository$/) do
   expect(match).to_not be_empty
 end
 
-Given(/^there is an rm\-request for the file$/) do
+Given(/^there is an rm\-request for the file in the queue$/) do
   tq = TestQueue.new(@work_root); tq.nuke; tq.init
   # N.B. the application doing the enqueuing will provide the path of the
   #      _original_ source file.
