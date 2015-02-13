@@ -32,8 +32,18 @@ module GitTransactor
       #   copy file fails during add
       #   git blows up (git add, git rm, git commit)
       num_processed = 0
-      commit_msg    = ''
+      @commit_msg   = ''
       Dir.glob(File.join(@work_root, 'queue', '*.csv')) .each do |entry_file|
+        process_entry(entry_file)
+        FileUtils.mv(entry_file, File.join(@work_root, 'processed'))
+        num_processed += 1
+      end
+      @repo.commit(@commit_msg) unless num_processed == 0
+      num_processed
+    end
+
+    private
+    def process_entry(entry_file)
         qe            = QueueEntry.new(entry_file)
         file_src_path = File.absolute_path(qe.path)
         file_rel_path = Utils.source_path_to_repo_path(file_src_path)
@@ -44,15 +54,10 @@ module GitTransactor
           FileUtils.mkdir(File.join(@repo_path, dir_rel_path)) unless File.directory?(dir_rel_path)
           FileUtils.cp(file_src_path, file_tgt_path, preserve: true)
           @repo.add(file_rel_path)
-          commit_msg += "Updating file #{file_rel_path}"
+          @commit_msg += "Updating file #{file_rel_path}"
         else
           raise ArgumentError.new("unrecognized action: #{qe.action}")
         end
-        FileUtils.mv(entry_file, File.join(@work_root, 'processed'))
-        num_processed += 1
-      end
-      @repo.commit(commit_msg) unless num_processed == 0
-      num_processed
     end
   end
 end
