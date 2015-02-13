@@ -33,7 +33,7 @@ module GitTransactor
       #   git blows up (git add, git rm, git commit)
       num_processed = 0
       @commit_msg   = ''
-      Dir.glob(File.join(@work_root, 'queue', '*.csv')).each do |entry_file|
+      queue_entries.each do |entry_file|
         process_entry(entry_file)
         FileUtils.mv(entry_file, File.join(@work_root, 'processed'))
         num_processed += 1
@@ -60,6 +60,9 @@ module GitTransactor
       FileUtils.cp(file_src_path, file_tgt_path, preserve: true)
       @repo.add(file_rel_path)
       @commit_msg += "Updating file #{file_rel_path}"
+    end
+    def queue_entries
+      @queue_entries ||= Dir.glob(File.join(@work_root, 'queue', '*.csv'))
     end
   end
 end
