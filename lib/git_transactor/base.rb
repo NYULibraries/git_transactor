@@ -31,15 +31,13 @@ module GitTransactor
       #   file specified in delete request not present in repo
       #   copy file fails during add
       #   git blows up (git add, git rm, git commit)
-      num_processed = 0
+      @num_processed = 0
       @commit_msg   = ''
-      queue_entries.each do |entry_file|
+      queue_entry_files.each do |entry_file|
         process_entry(entry_file)
-        FileUtils.mv(entry_file, File.join(@work_root, 'processed'))
-        num_processed += 1
       end
-      @repo.commit(@commit_msg) unless num_processed == 0
-      num_processed
+      @repo.commit(@commit_msg) unless @num_processed == 0
+      @num_processed
     end
 
     private
@@ -52,17 +50,39 @@ module GitTransactor
         end
     end
     def process_add_entry
-      file_src_path = File.absolute_path(@qe.path)
-      file_rel_path = Utils.source_path_to_repo_path(file_src_path)
-      dir_rel_path  = File.dirname(file_rel_path)
-      file_tgt_path = File.join(@repo_path, file_rel_path)
-      FileUtils.mkdir(File.join(@repo_path, dir_rel_path)) unless File.directory?(dir_rel_path)
-      FileUtils.cp(file_src_path, file_tgt_path, preserve: true)
-      @repo.add(file_rel_path)
-      @commit_msg += "Updating file #{file_rel_path}"
+      setup_paths
+      create_repo_subdir_if_needed
+      copy_src_file_to_repo
+      git_add_file_to_repo
+      update_commit_msg_with_add
+      relocate_entry_file
+      update_num_processed
     end
-    def queue_entries
-      @queue_entries ||= Dir.glob(File.join(@work_root, 'queue', '*.csv'))
+    def queue_entry_files
+      @queue_entry_files ||= Dir.glob(File.join(@work_root, 'queue', '*.csv'))
+    end
+    def setup_paths
+      @file_rel_path = Utils.source_path_to_repo_path(@qe.path)
+      @dir_rel_path  = File.dirname(@file_rel_path)
+      @file_tgt_path = File.join(@repo_path, @file_rel_path)
+    end
+    def create_repo_subdir_if_needed
+      FileUtils.mkdir(File.join(@repo_path, @dir_rel_path)) unless File.directory?(@dir_rel_path)
+    end
+    def copy_src_file_to_repo
+      FileUtils.cp(@qe.path, @file_tgt_path, preserve: true)
+    end
+    def git_add_file_to_repo
+      @repo.add(@file_rel_path)
+    end
+    def update_commit_msg_with_add
+      @commit_msg += "Updating file #{@file_rel_path}"
+    end
+    def relocate_entry_file
+      FileUtils.mv(@qe.entry_path, File.join(@work_root, 'processed'))
+    end
+    def update_num_processed
+      @num_processed += 1
     end
   end
 end
