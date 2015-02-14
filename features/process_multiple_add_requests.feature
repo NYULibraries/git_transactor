@@ -10,10 +10,10 @@ Feature: process multiple add-file requests
     And   a source-file directory exists
     And   a source-file named "foo/bar.txt" exists
     And   the file "foo/bar.txt" does not exist in the repo
-    And   there is an add-request for "foo/bar.txt" in the queue
+    And   there is an "add" request for "foo/bar.txt" in the queue
     And   a source-file named "baz/quux.txt" exists
     And   the file "baz/quux.txt" does not exist in the repo
-    And   there is an add-request for "baz/quux.txt" in the queue
+    And   there is an "add" request for "baz/quux.txt" in the queue
     When  I process the queue
     Then  I should see "foo/bar.txt" in the repository
     And   I should see "baz/quux.txt" in the repository
