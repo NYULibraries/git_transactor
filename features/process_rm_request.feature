@@ -7,8 +7,9 @@ Feature: process rm-file-request
   Scenario: rm-file request
     Given that the git repository exists
     And   a source-file directory exists
-    And   the source-file to be removed exists in the git repository
-    And   there is an rm-request for the file in the queue
+    And   the request queue exists
+    And   the file "pumpkin/pie.txt" exists in the repository
+    And   there is an "rm" request for "pumpkin/pie.txt" in the queue
     When  I process the queue
-    Then  I should not see the file in the repository
-    And   I should see "Deleting file" in the commit log
+    Then  the file "pumpkin/pie.txt" does not exist in the repository
+    And   I should see "Deleting file pumpkin/pie.txt" in the commit log
