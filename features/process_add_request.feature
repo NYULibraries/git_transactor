@@ -6,10 +6,11 @@ Feature: process add-file-request
 
   Scenario: add-file request
     Given that the git repository exists
+    And   the request queue exists
     And   a source-file directory exists
-    And   a file to be added to the repo exists
-    And   the source-file does not exist in the git repository
-    And   there is an add-request for the file in the queue
+    And   a source-file named "apple/peaches.txt" exists
+    And   the file "apple/peaches.txt" does not exist in the repository
+    And   there is an "add" request for "apple/peaches.txt" in the queue
     When  I process the queue
-    Then  I should see the file in the repository
-    And   I should see "Updating file" in the commit log
+    Then  I should see "apple/peaches.txt" in the repository
+    And   I should see "Updating file apple/peaches.txt" in the commit log
