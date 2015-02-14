@@ -15,7 +15,7 @@ Given(/^there is a request queue$/) do
 end
 
 Given(/^there is an "(.*?)" request for "(.*?)" in the queue$/) do |action, rel_path|
-     @tq.enqueue(action, File.expand_path(File.join(@src_dir.path, rel_path)))
+  @tq.enqueue(action, File.expand_path(File.join(@src_dir.path, rel_path)))
 end
 
 Then(/^I should see "(.*?)" in the repository$/) do |rel_path|
@@ -34,8 +34,4 @@ Given(/^the file "(.*?)" exists in the repo$/) do |rel_path|
   g.commit("adding test file: #{rel_path}")
   match = g.status.select {|x| x.path == rel_path }
   expect(match).to_not be_empty
-end
-
-Given(/^there is an rm\-request for "(.*?)" in the queue$/) do |arg1|
-  pending # express the regexp above with the code you wish you had
 end
