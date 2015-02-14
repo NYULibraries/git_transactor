@@ -1,8 +1,8 @@
-Feature: process multiple add-file requests
+Feature: process multiple add-file and rm-file requests
 
   As the git_transactor
   I want to process multiple 'add-file' and 'rm-file' requests
-  So that the files are added and removed from to the repository
+  So that the files are added to and removed from the repository
 
   Scenario: process multiple add-file and rm-file requests
     Given that the git repository exists
