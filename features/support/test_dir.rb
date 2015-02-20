@@ -4,7 +4,9 @@ class TestDir
   def initialize(path = 'features/fixtures/source')
     @path = path
   end
-
+  def create_root
+    FileUtils.mkdir(@path) unless File.exists?(@path)
+  end
   def nuke
     FileUtils.rm_rf(@path) if File.directory?(@path)
   end
