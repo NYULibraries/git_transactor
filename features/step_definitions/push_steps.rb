@@ -16,7 +16,19 @@ Given(/^that the local repository exists and was cloned from the remote reposito
 end
 
 Given(/^the local repository has changes that the remote repository does not$/) do
-  pending # express the regexp above with the code you wish you had
+  rel_path = 'oranges/blueberries.txt'
+  subdir = rel_path.split('/')[0]
+
+  @local_repo = TestRepo.new(@local_repo_path)
+  @local_repo.open
+  @local_repo.create_sub_directory(subdir)
+  @local_repo.create_file(rel_path, 'meaningless drivel')
+  @local_repo.add(rel_path)
+  @local_repo.commit("Updating file #{rel_path}")
+  match = @local_repo.status.select {|x| x.path == rel_path }
+   expect(match).not_to be_empty
+  match = @remote_repo.status.select {|x| x.path == rel_path }
+   expect(match).to be_empty
 end
 
 When(/^I push the local repository to the remote repository$/) do
