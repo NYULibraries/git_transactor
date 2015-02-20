@@ -5,7 +5,7 @@ class TestDir
     @path = path
   end
   def create_root
-    FileUtils.mkdir(@path) unless File.exists?(@path)
+    FileUtils.mkdir_p(@path) unless File.exists?(@path)
   end
   def nuke
     FileUtils.rm_rf(@path) if File.directory?(@path)
