@@ -6,6 +6,9 @@ Given(/^that the git repository exists$/) do
   @repo = TestRepo.new(@repo_path)
   @repo.nuke
   @repo.init
+  @repo.create_file('foo.txt','foo.txt')
+  @repo.add('foo.txt')
+  @repo.commit('Initial commit')
 end
 
 Given(/^a source\-file directory exists$/) do
