@@ -1,8 +1,9 @@
 class TestDir
   attr_reader :path
 
-  def initialize(path = 'features/fixtures/source')
-    @path = path
+  def initialize(path = 'features/fixtures/source', options = {})
+    @options = options
+    @path    = path
   end
   def create_root
     FileUtils.mkdir_p(@path) unless File.exists?(@path)
