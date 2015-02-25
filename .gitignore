@@ -7,6 +7,8 @@
 /spec/fixtures/repo/
 /spec/fixtures/source/
 /spec/fixtures/work/
+/spec/fixtures/local_repo/
+/spec/fixtures/remote_repo/
 /features/fixtures/repo/
 /features/fixtures/source/
 /features/fixtures/work/
