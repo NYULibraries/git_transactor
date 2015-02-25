@@ -12,6 +12,8 @@
 /features/fixtures/repo/
 /features/fixtures/source/
 /features/fixtures/work/
+/features/fixtures/local_repo/
+/features/fixtures/remote_repo/
 
 /work/queue/*
 /work/processed/*
