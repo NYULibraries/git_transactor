@@ -6,28 +6,16 @@ module GitTransactor
     let(:repo_path)   { 'spec/fixtures/repo' }
     let(:source_path) { 'spec/fixtures/source' }
     let(:work_root)   { 'spec/fixtures/work' }
+    let(:remote_url)  { 'spec/fixtures/remote_repo/blerf' }
 
     let(:base) { Base.new(repo_path:   repo_path,
                           source_path: source_path,
-                          work_root:   work_root) }
+                          work_root:   work_root,
+                          remote_url:  remote_url) }
 
     let(:tr) { TestRepo.new(repo_path) }
     let(:tq) { TestQueue.new(work_root) }
     let(:tsd){ TestSourceDir.new(source_path) }
-
-    before(:each) do
-      tr.nuke
-      tr.init
-      tr.create_file('foo.txt','foo.txt')
-      tr.add('foo.txt')
-      tr.commit('Initial commit')
-
-      tq.nuke
-      tq.init
-
-      tsd.nuke
-      tsd.init
-    end
 
     include SetupUtils
 
@@ -38,6 +26,20 @@ module GitTransactor
 
 
     describe '#process' do
+      before(:each) do
+        tr.nuke
+        tr.init
+        tr.create_file('foo.txt','foo.txt')
+        tr.add('foo.txt')
+        tr.commit('Initial commit')
+
+        tq.nuke
+        tq.init
+
+        tsd.nuke
+        tsd.init
+      end
+
       context "with an empty queue" do
         it "should return the correct number of entries processed" do
           expect(base.process_queue).to be == 0
@@ -123,16 +125,37 @@ module GitTransactor
     end
 
     describe "#push" do
-     let(:remote_path) { 'spec/fixtures/remote/foo' }
-     context "under normal conditions" do
-        before(:each) do
-          setup_remote_repo
-          setup_local_repo
-        end
+      context "under normal conditions" do
         it "should synchronize the repositories" do
+          local_repo_path   = 'spec/fixtures/local_repo/blerf'
+          local_repo_name   = File.basename(local_repo_path)
+          local_repo_parent = File.dirname(local_repo_path)
+
+          base = Base.new(repo_path:   local_repo_path,
+                                source_path: source_path,
+                                work_root:   work_root,
+                                remote_url:  remote_url)
+
+          trr = TestRepo.new(remote_url, bare: true)
+          trr.nuke
+          trr.init
+
+          td  = TestDir.new(local_repo_parent)
+          td.nuke
+          td.create_root
+
+          Git.clone(trr.path, local_repo_name, path: td.path)
+
+          local_repo = TestRepo.new(local_repo_path)
+          local_repo.open
+          local_repo.create_file('unicorns.txt', 'and rainbows!')
+          local_repo.add('unicorns.txt')
+          local_repo.commit('add unicorns and rainbows!')
           base.push
-          local_repo_head  = Git.ls_remote(@local_repo.path)['head'][:sha]
-          remote_repo_head = Git.ls_remote(@remote_repo.path)['head'][:sha]
+          puts local_repo_path
+          puts trr.path
+          local_repo_head  = Git.ls_remote(File.expand_path(local_repo_path))['head'][:sha]
+          remote_repo_head = Git.ls_remote(File.expand_path(trr.path))['head'][:sha]
           expect(local_repo_head).to be == remote_repo_head
         end
       end
