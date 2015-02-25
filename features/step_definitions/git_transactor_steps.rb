@@ -2,6 +2,7 @@ Given(/^that the git repository exists$/) do
   @repo_path   = 'features/fixtures/repo'
   @source_path = 'features/fixtures/source'
   @work_root   = 'features/fixtures/work'
+  @remote_repo_path = 'features/fixtures/remote_repo/blerf'
 
   @repo = TestRepo.new(@repo_path)
   @repo.nuke
@@ -21,7 +22,8 @@ end
 When(/^I process the queue$/) do
   gt = GitTransactor::Base.new(repo_path:   @repo.path,
                                source_path: @src_dir.path,
-                               work_root:   @work_root)
+                               work_root:   @work_root,
+                               remote_url:  @remote_repo_path)
   gt.process_queue
 end
 
