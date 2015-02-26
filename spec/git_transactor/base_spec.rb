@@ -27,17 +27,7 @@ module GitTransactor
 
     describe '#process' do
       before(:each) do
-        tr.nuke
-        tr.init
-        tr.create_file('foo.txt','foo.txt')
-        tr.add('foo.txt')
-        tr.commit('Initial commit')
-
-        tq.nuke
-        tq.init
-
-        tsd.nuke
-        tsd.init
+        setup_initial_state
       end
 
       context "with an empty queue" do
@@ -48,9 +38,6 @@ module GitTransactor
 
 
       context "with a single 'add' request in the queue" do
-        let(:sub_directory) { 'jgp' }
-        let(:src_file) { "interesting-stuff.xml" }
-
         before(:each) do
           setup_add_state
         end
@@ -73,10 +60,6 @@ module GitTransactor
 
 
       context "with a single 'rm' request in the queue" do
-        let(:sub_directory) { 'pgj' }
-        let(:file_to_rm) { "spiffingly-interesting.xml" }
-        let(:file_to_rm_rel_path) {File.join(sub_directory, file_to_rm)}
-
         before(:each) do
           setup_rm_state
         end
@@ -98,10 +81,6 @@ module GitTransactor
       end
 
       context "with two 'add' requests in the queue" do
-        let(:sub_directory) { 'jgp' }
-        let(:src_file) { "interesting-stuff.xml" }
-        let(:sub_directory_2) { 'khq' }
-        let(:src_file_2) { "more-interesting-stuff.xml" }
         before(:each) do
           setup_add_state
           setup_add_state_2
