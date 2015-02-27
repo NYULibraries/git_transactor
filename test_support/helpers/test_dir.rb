@@ -9,6 +9,7 @@ class TestDir
     FileUtils.mkdir_p(@path) unless File.exists?(@path)
   end
   def nuke
+    File.chmod(0755, @path)
     FileUtils.rm_rf(@path) if File.directory?(@path)
   end
   def create_file(fname, msg)
