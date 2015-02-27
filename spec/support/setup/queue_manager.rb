@@ -13,6 +13,12 @@ module GitTransactor
         tq.init
         File.chmod(0333, unreadable_root)
       end
+      def setup_unwritable_root
+        tq = TestQueue.new(unwritable_root)
+        tq.nuke
+        tq.init
+        File.chmod(0555, unwritable_root)
+      end
     end
   end
 end

@@ -5,6 +5,7 @@ module GitTransactor
     let(:fixture_root)    { 'spec/fixtures/queue_manager' }
     let(:valid_root)      { fixture_root + '/valid_root' }
     let(:unreadable_root) { fixture_root + '/invalid_root/unreadable_root' }
+    let(:unwritable_root) { fixture_root + '/invalid_root/unwritable_root' }
 
     include Setup::QueueManager
 
@@ -21,7 +22,12 @@ module GitTransactor
             expect {GitTransactor::QueueManager.open(unreadable_root)}.to raise_error(ArgumentError, /unreadable/)
           end
         end
-        context "when directory is unwritable"
+        context "when directory is unwritable" do
+          before(:each) { setup_unwritable_root }
+          it "raises an ArgumentError" do
+            expect {GitTransactor::QueueManager.open(unwritable_root)}.to raise_error(ArgumentError, /unwritable/)
+          end
+        end
         context "when root directory exists but does not have a valid structure"
       end
     end
