@@ -6,6 +6,51 @@ module GitTransactor
     private
     def initialize(root)
       @root = root
+      @errors = {}
+      check_structure
+    end
+    def check_structure
+      check_root_dir
+      check_queue_dir
+      check_processed_dir
+      check_error_dir
+      raise ArgumentError.new(@errors) unless @errors.empty?
+    end
+    def check_root_dir
+      errors = check_dir(@root)
+      add_error(@root, errors.join(',')) unless errors.empty?
+    end
+    def check_queue_dir
+      errors = check_dir(queue_path)
+      add_error(queue_path, errors.join(',')) unless errors.empty?
+    end
+    def check_processed_dir
+      errors = check_dir(processed_path)
+      add_error(processed_path, errors.join(',')) unless errors.empty?
+    end
+    def check_error_dir
+      errors = check_dir(error_path)
+      add_error(error_path, errors.join(',')) unless errors.empty?
+    end
+    def check_dir(path)
+      errors = [ ]
+      errors << 'unreadable'   unless File.readable?(path)
+      errors << 'unwritable'   unless File.writable?(path)
+      errors << 'unexecutable' unless File.executable?(path)
+      errors
+    end
+
+    def queue_path
+      @queue_path || File.join(@root, 'queue')
+    end
+    def processed_path
+      @processed_path || File.join(@root, 'processed')
+    end
+    def error_path
+      @error_path || File.join(@root, 'error')
+    end
+    def add_error(key, message)
+      @errors[key] = message
     end
   end
 end

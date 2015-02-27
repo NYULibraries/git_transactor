@@ -2,7 +2,9 @@ require 'spec_helper'
 
 module GitTransactor
   describe QueueManager do
-    let(:valid_root) { 'spec/fixtures/queue_manager/valid_root'}
+    let(:fixture_root)    { 'spec/fixtures/queue_manager' }
+    let(:valid_root)      { fixture_root + '/valid_root' }
+    let(:unreadable_root) { fixture_root + '/invalid_root/unreadable_root' }
 
     include Setup::QueueManager
 
@@ -12,8 +14,13 @@ module GitTransactor
         subject { GitTransactor::QueueManager.open(valid_root) }
         it { should be_an_instance_of(GitTransactor::QueueManager) }
       end
-      pending "when passed an invalid root directory" do
-        context "when directory is unreadable"
+      context "when passed an invalid root directory" do
+        before(:each) { setup_unreadable_root }
+        context "when directory is unreadable" do
+          it "raises an ArgumentError" do
+            expect {GitTransactor::QueueManager.open(unreadable_root)}.to raise_error(ArgumentError, /unreadable/)
+          end
+        end
         context "when directory is unwritable"
         context "when root directory exists but does not have a valid structure"
       end
@@ -24,7 +31,7 @@ module GitTransactor
       end
       context "when parent directory is unwritabe"
     end
-    describe "#incoming" do
+    describe "#queue" do
       pending "when there are no entries"
       pending "when there are entries"
     end
