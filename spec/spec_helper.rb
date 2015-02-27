@@ -1,5 +1,3 @@
 require_relative '../lib/git_transactor'
-require_relative '../features/support/test_dir'
-require_relative '../features/support/test_repo'
-require_relative '../features/support/test_source_dir'
-require_relative '../features/support/test_queue'
+require_relative '../test_support/helpers'
+require_relative './support/setup_utils'
