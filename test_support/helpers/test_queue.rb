@@ -15,7 +15,7 @@ class TestQueue < TestDir
   def enqueue(action, source_path)
     raise ArgumentError.new("invalid action: #{action}") unless
       ['add','rm'].include?(action)
-    entry = "#{Time.now.strftime("%Y%m%dT%H%M%S%6N")}.csv"
+    entry = "#{Time.now.strftime("%Y%m%dT%H%M%S%9N")}.csv"
     entry_path = File.join(@queue_dir, entry)
     File.open(entry_path, "w") do |f|
       f.puts("#{action},#{source_path}")
