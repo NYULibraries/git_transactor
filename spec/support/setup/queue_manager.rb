@@ -19,6 +19,12 @@ module GitTransactor
         tq.init
         File.chmod(0555, unwritable_root)
       end
+      def setup_unexecutable_root
+        tq = TestQueue.new(unexecutable_root)
+        tq.nuke
+        tq.init
+        File.chmod(0666, unexecutable_root)
+      end
     end
   end
 end
