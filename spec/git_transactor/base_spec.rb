@@ -17,7 +17,7 @@ module GitTransactor
     let(:tq) { TestQueue.new(work_root) }
     let(:tsd){ TestSourceDir.new(source_path) }
 
-    include SetupUtils
+    include Setup::Base
 
     context "when class is instantiated" do
       subject { base }
