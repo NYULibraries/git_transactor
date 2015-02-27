@@ -48,5 +48,23 @@ module GitTransactor
 
       tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
     end
+
+    def setup_push_state
+      trr = TestRepo.new(remote_url, bare: true)
+      trr.nuke
+      trr.init
+
+      td  = TestDir.new(local_repo_parent)
+      td.nuke
+      td.create_root
+
+      Git.clone(trr.path, local_repo_name, path: td.path)
+
+      local_repo = TestRepo.new(local_repo_path)
+      local_repo.open
+      local_repo.create_file('unicorns.txt', 'and rainbows!')
+      local_repo.add('unicorns.txt')
+      local_repo.commit('add unicorns and rainbows!')
+    end
   end
 end

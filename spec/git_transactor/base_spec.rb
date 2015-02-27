@@ -105,36 +105,22 @@ module GitTransactor
 
     describe "#push" do
       context "under normal conditions" do
+        let(:local_repo_path)   { 'spec/fixtures/local_repo/blerf' }
+        let(:local_repo_name)   { File.basename(local_repo_path)   }
+        let(:local_repo_parent) { File.dirname(local_repo_path)    }
+
+        let(:base) { Base.new(repo_path:   local_repo_path,
+                              source_path: source_path,
+                              work_root:   work_root,
+                              remote_url:  remote_url) }
+
         it "should synchronize the repositories" do
-          local_repo_path   = 'spec/fixtures/local_repo/blerf'
-          local_repo_name   = File.basename(local_repo_path)
-          local_repo_parent = File.dirname(local_repo_path)
+          setup_push_state
 
-          base = Base.new(repo_path:   local_repo_path,
-                                source_path: source_path,
-                                work_root:   work_root,
-                                remote_url:  remote_url)
-
-          trr = TestRepo.new(remote_url, bare: true)
-          trr.nuke
-          trr.init
-
-          td  = TestDir.new(local_repo_parent)
-          td.nuke
-          td.create_root
-
-          Git.clone(trr.path, local_repo_name, path: td.path)
-
-          local_repo = TestRepo.new(local_repo_path)
-          local_repo.open
-          local_repo.create_file('unicorns.txt', 'and rainbows!')
-          local_repo.add('unicorns.txt')
-          local_repo.commit('add unicorns and rainbows!')
           base.push
-          puts local_repo_path
-          puts trr.path
-          local_repo_head  = Git.ls_remote(File.expand_path(local_repo_path))['head'][:sha]
-          remote_repo_head = Git.ls_remote(File.expand_path(trr.path))['head'][:sha]
+          local_repo_head  = Git.ls_remote(local_repo_path)['head'][:sha]
+          remote_repo_head = Git.ls_remote(remote_url)['head'][:sha]
+
           expect(local_repo_head).to be == remote_repo_head
         end
       end
