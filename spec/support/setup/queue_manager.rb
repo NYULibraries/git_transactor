@@ -7,6 +7,12 @@ module GitTransactor
         tq.nuke
         tq.init
       end
+      def setup_unreadable_root
+        tq = TestQueue.new(unreadable_root)
+        tq.nuke
+        tq.init
+        File.chmod(0333, unreadable_root)
+      end
     end
   end
 end
