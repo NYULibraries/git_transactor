@@ -31,6 +31,10 @@ module GitTransactor
         tq.init
         Dir.rmdir(malformed_root + '/queue')
       end
+      def setup_valid_create
+        tq = TestQueue.new(valid_create)
+        tq.nuke
+      end
     end
   end
 end

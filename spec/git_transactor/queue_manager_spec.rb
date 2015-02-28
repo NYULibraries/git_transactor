@@ -9,6 +9,7 @@ module GitTransactor
     let(:unexecutable_root) { fixture_root + '/invalid_root/unexecutable_root' }
     let(:missing_root)    { fixture_root + '/invalid_root/this/path/does/not/exist' }
     let(:malformed_root)  { fixture_root + '/invalid_root/malformed_root' }
+    let(:valid_create)    { fixture_root + '/valid_create' }
     include Setup::QueueManager
 
     describe ".open" do
@@ -51,7 +52,10 @@ module GitTransactor
     end
     describe ".create" do
       context "when parent directory is writable" do
-        pending "creates the expected directory structure"
+        before(:each) { setup_valid_create }
+        it "creates a valid QueueManager structure" do
+          expect(GitTransactor::QueueManager.create(valid_create)).to be_an_instance_of(GitTransactor::QueueManager)
+        end
       end
       context "when parent directory is unwritabe"
     end

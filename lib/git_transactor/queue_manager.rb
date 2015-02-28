@@ -3,7 +3,17 @@ module GitTransactor
     def self.open(root)
       self.new(root)
     end
+    def self.create(root)
+      self.create_structure(root)
+      self.new(root)
+    end
     private
+    def self.create_structure(root)
+      [root,
+       root + '/queue',
+       root + '/processed',
+       root + '/error'].each {|d| Dir.mkdir(d)}
+    end
     def initialize(root)
       @root = root
       @errors = {}
@@ -40,7 +50,6 @@ module GitTransactor
       errors << 'unexecutable'   unless File.executable?(path)
       errors
     end
-
     def queue_path
       @queue_path || File.join(@root, 'queue')
     end
