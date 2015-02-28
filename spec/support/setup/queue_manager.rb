@@ -1,4 +1,3 @@
-# Helper methods to setup state for GitTransactor Base examples
 module GitTransactor
   module Setup
     module QueueManager

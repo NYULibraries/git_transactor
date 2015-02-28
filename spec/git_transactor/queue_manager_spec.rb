@@ -10,6 +10,8 @@ module GitTransactor
     let(:missing_root)    { fixture_root + '/invalid_root/this/path/does/not/exist' }
     let(:malformed_root)  { fixture_root + '/invalid_root/malformed_root' }
     let(:valid_create)    { fixture_root + '/valid_create' }
+    let(:invalid_create)  { fixture_root + '/invalid_create/work' }
+
     include Setup::QueueManager
 
     describe ".open" do
@@ -57,7 +59,11 @@ module GitTransactor
           expect(GitTransactor::QueueManager.create(valid_create)).to be_an_instance_of(GitTransactor::QueueManager)
         end
       end
-      context "when parent directory is unwritabe"
+      context "when parent directory is unwritabe" do
+        it "raises an ArgumentError" do
+          expect {GitTransactor::QueueManager.create(invalid_create)}.to raise_error(ArgumentError, /unwritable/)
+        end
+      end
     end
     describe "#queue" do
       pending "when there are no entries"

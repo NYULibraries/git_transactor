@@ -9,6 +9,8 @@ module GitTransactor
     end
     private
     def self.create_structure(root)
+      parent = File.dirname(File.expand_path(root))
+      raise ArgumentError.new("#{parent} unwritable") unless File.writable?(parent)
       [root,
        root + '/queue',
        root + '/processed',
