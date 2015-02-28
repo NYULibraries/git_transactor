@@ -25,6 +25,12 @@ module GitTransactor
         tq.init
         File.chmod(0666, unexecutable_root)
       end
+      def setup_malformed_root
+        tq = TestQueue.new(malformed_root)
+        tq.nuke
+        tq.init
+        Dir.rmdir(malformed_root + '/queue')
+      end
     end
   end
 end

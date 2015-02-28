@@ -8,7 +8,7 @@ module GitTransactor
     let(:unwritable_root) { fixture_root + '/invalid_root/unwritable_root' }
     let(:unexecutable_root) { fixture_root + '/invalid_root/unexecutable_root' }
     let(:missing_root)    { fixture_root + '/invalid_root/this/path/does/not/exist' }
-
+    let(:malformed_root)  { fixture_root + '/invalid_root/malformed_root' }
     include Setup::QueueManager
 
     describe ".open" do
@@ -41,7 +41,12 @@ module GitTransactor
             expect {GitTransactor::QueueManager.open(unexecutable_root)}.to raise_error(ArgumentError, /unexecutable/)
           end
         end
-        pending "when root directory exists but does not have a valid structure"
+        context "when root directory exists but does not have a valid structure" do
+          before(:each) { setup_malformed_root }
+          it "raises an ArgumentError" do
+            expect {GitTransactor::QueueManager.open(malformed_root)}.to raise_error(ArgumentError)
+          end
+        end
       end
     end
     describe ".create" do
