@@ -34,9 +34,10 @@ module GitTransactor
     end
     def check_dir(path)
       errors = [ ]
-      errors << 'unreadable'   unless File.readable?(path)
-      errors << 'unwritable'   unless File.writable?(path)
-      errors << 'unexecutable' unless File.executable?(path)
+      errors << 'does not exist' unless File.directory?(path)
+      errors << 'unreadable'     unless File.readable?(path)
+      errors << 'unwritable'     unless File.writable?(path)
+      errors << 'unexecutable'   unless File.executable?(path)
       errors
     end
 

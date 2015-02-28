@@ -7,6 +7,7 @@ module GitTransactor
     let(:unreadable_root) { fixture_root + '/invalid_root/unreadable_root' }
     let(:unwritable_root) { fixture_root + '/invalid_root/unwritable_root' }
     let(:unexecutable_root) { fixture_root + '/invalid_root/unexecutable_root' }
+    let(:missing_root)    { fixture_root + '/invalid_root/this/path/does/not/exist' }
 
     include Setup::QueueManager
 
@@ -17,8 +18,13 @@ module GitTransactor
         it { should be_an_instance_of(GitTransactor::QueueManager) }
       end
       context "when passed an invalid root directory" do
-        before(:each) { setup_unreadable_root }
+        context "when directory does not exist" do
+          it "raises an ArgumentError" do
+            expect {GitTransactor::QueueManager.open(missing_root)}.to raise_error(ArgumentError, /does not exist/)
+          end
+        end
         context "when directory is unreadable" do
+          before(:each) { setup_unreadable_root }
           it "raises an ArgumentError" do
             expect {GitTransactor::QueueManager.open(unreadable_root)}.to raise_error(ArgumentError, /unreadable/)
           end
@@ -35,7 +41,7 @@ module GitTransactor
             expect {GitTransactor::QueueManager.open(unexecutable_root)}.to raise_error(ArgumentError, /unexecutable/)
           end
         end
-        context "when root directory exists but does not have a valid structure"
+        pending "when root directory exists but does not have a valid structure"
       end
     end
     describe ".create" do
