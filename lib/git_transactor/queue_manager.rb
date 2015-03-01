@@ -13,6 +13,9 @@ module GitTransactor
     def passed
       passed_entries
     end
+    def failed
+      failed_entries
+    end
 
     private
     QUEUE_SUBDIR  = 'queue'
