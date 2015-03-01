@@ -46,8 +46,9 @@ module GitTransactor
         tq.add_failed('rm','apples')
         tq.add_passed('add','peaches')
         tq.add_passed('rm','pumpkin')
-        tq.enqueue('add','pie')
+        tq.add_passed('add','pie')
         tq.enqueue('rm','cake')
+        tq.enqueue('rm','doughnuts')
       end
     end
   end

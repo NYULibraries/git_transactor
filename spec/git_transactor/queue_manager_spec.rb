@@ -91,7 +91,15 @@ module GitTransactor
         it { is_expected.to be == [] }
       end
 
-      pending "when there are entries"
+     context "when there are entries" do
+        before(:each) { setup_populated_queue }
+        it "should have the expected number of entries" do
+          expect(GitTransactor::QueueManager.open(populated_queue).passed.length).to be == 3
+        end
+        it "should return an Array of QueueEntry objects" do
+          expect(GitTransactor::QueueManager.open(populated_queue).passed[0]).to be_an_instance_of(QueueEntry)
+        end
+      end
     end
     describe "#failed" do
       context "when there are no entries" do
