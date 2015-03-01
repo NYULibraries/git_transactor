@@ -76,7 +76,12 @@ module GitTransactor
       pending "when there are entries"
     end
     describe "#passed" do
-      pending "when there are no entries"
+      context "when there are no entries" do
+        before(:each) { setup_empty_queue }
+        subject { GitTransactor::QueueManager.open(empty_queue).passed }
+        it { is_expected.to be == [] }
+      end
+
       pending "when there are entries"
     end
     describe "#failed" do

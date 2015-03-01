@@ -10,6 +10,9 @@ module GitTransactor
     def queue
       queue_entries
     end
+    def passed
+      passed_entries
+    end
 
     private
     def self.create_structure(root)
@@ -28,8 +31,8 @@ module GitTransactor
     def check_structure
       check_root_dir
       check_queue_dir
-      check_processed_dir
-      check_error_dir
+      check_passed_dir
+      check_failed_dir
       raise ArgumentError.new(@errors) unless @errors.empty?
     end
     def check_root_dir
@@ -40,13 +43,13 @@ module GitTransactor
       errors = check_dir(queue_path)
       add_error(queue_path, errors.join(',')) unless errors.empty?
     end
-    def check_processed_dir
-      errors = check_dir(processed_path)
-      add_error(processed_path, errors.join(',')) unless errors.empty?
+    def check_passed_dir
+      errors = check_dir(passed_path)
+      add_error(passed_path, errors.join(',')) unless errors.empty?
     end
-    def check_error_dir
-      errors = check_dir(error_path)
-      add_error(error_path, errors.join(',')) unless errors.empty?
+    def check_failed_dir
+      errors = check_dir(failed_path)
+      add_error(failed_path, errors.join(',')) unless errors.empty?
     end
     def check_dir(path)
       errors = [ ]
@@ -59,11 +62,11 @@ module GitTransactor
     def queue_path
       @queue_path || File.join(@root, 'queue')
     end
-    def processed_path
-      @processed_path || File.join(@root, 'processed')
+    def passed_path
+      @passed_path || File.join(@root, 'processed')
     end
-    def error_path
-      @error_path || File.join(@root, 'error')
+    def failed_path
+      @failed_path || File.join(@root, 'error')
     end
     def add_error(key, message)
       @errors[key] = message
@@ -73,6 +76,12 @@ module GitTransactor
     end
     def queue_entries
       queue_entry_files.collect { |qef| QueueEntry.new(qef) }
+    end
+    def passed_entry_files
+      Dir.glob(File.join(passed_path, '*.csv')).sort
+    end
+    def passed_entries
+      passed_entry_files.collect { |qef| QueueEntry.new(qef) }
     end
   end
 end
