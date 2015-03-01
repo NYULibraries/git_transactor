@@ -4,8 +4,8 @@ class TestQueue < TestDir
   def initialize(path = 'features/fixtures/work')
     @path      = path
     @queue_dir = File.join(@path, 'queue')
-    @error_dir = File.join(@path, 'error')
-    @processed_dir = File.join(@path, 'processed')
+    @error_dir = File.join(@path, 'failed')
+    @processed_dir = File.join(@path, 'passed')
   end
   def init
     create_root

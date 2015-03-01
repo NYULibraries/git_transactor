@@ -20,8 +20,8 @@ module GitTransactor
       raise ArgumentError.new("#{parent} unwritable") unless File.writable?(parent)
       [root,
        root + '/queue',
-       root + '/processed',
-       root + '/error'].each {|d| Dir.mkdir(d)}
+       root + '/passed',
+       root + '/failed'].each {|d| Dir.mkdir(d)}
     end
     def initialize(root)
       @root = root
@@ -63,10 +63,10 @@ module GitTransactor
       @queue_path || File.join(@root, 'queue')
     end
     def passed_path
-      @passed_path || File.join(@root, 'processed')
+      @passed_path || File.join(@root, 'passed')
     end
     def failed_path
-      @failed_path || File.join(@root, 'error')
+      @failed_path || File.join(@root, 'failed')
     end
     def add_error(key, message)
       @errors[key] = message
@@ -82,6 +82,12 @@ module GitTransactor
     end
     def passed_entries
       passed_entry_files.collect { |qef| QueueEntry.new(qef) }
+    end
+    def failed_entry_files
+      Dir.glob(File.join(failed_path, '*.csv')).sort
+    end
+    def failed_entries
+      failed_entry_files.collect { |qef| QueueEntry.new(qef) }
     end
   end
 end
