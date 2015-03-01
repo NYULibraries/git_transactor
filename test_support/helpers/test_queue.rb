@@ -2,15 +2,15 @@ class TestQueue < TestDir
   attr_reader :root
 
   def initialize(path = 'features/fixtures/work')
-    @path      = path
-    @queue_dir = File.join(@path, 'queue')
-    @error_dir = File.join(@path, 'failed')
-    @processed_dir = File.join(@path, 'passed')
+    @path       = path
+    @queue_dir  = File.join(@path, 'queue')
+    @failed_dir = File.join(@path, 'failed')
+    @passed_dir = File.join(@path, 'passed')
   end
   def init
     create_root
-    [@queue_dir, @error_dir,
-     @processed_dir].each {|d| FileUtils.mkdir(d)}
+    [@queue_dir, @failed_dir,
+     @passed_dir].each {|d| FileUtils.mkdir(d)}
   end
   def enqueue(action, source_path)
     raise ArgumentError.new("invalid action: #{action}") unless
