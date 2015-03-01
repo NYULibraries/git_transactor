@@ -11,6 +11,7 @@ module GitTransactor
     let(:malformed_root)  { fixture_root + '/invalid_root/malformed_root' }
     let(:valid_create)    { fixture_root + '/valid_create' }
     let(:invalid_create)  { fixture_root + '/invalid_create/work' }
+    let(:empty_queue)     { fixture_root + '/empty_queue' }
 
     include Setup::QueueManager
 
@@ -66,7 +67,12 @@ module GitTransactor
       end
     end
     describe "#queue" do
-      pending "when there are no entries"
+      context "when there are no entries" do
+        before(:each) { setup_empty_queue }
+        subject { GitTransactor::QueueManager.open(empty_queue).queue }
+        it { is_expected.to be == [] }
+      end
+
       pending "when there are entries"
     end
     describe "#passed" do

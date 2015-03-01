@@ -34,6 +34,11 @@ module GitTransactor
         tq = TestQueue.new(valid_create)
         tq.nuke
       end
+      def setup_empty_queue
+        tq = TestQueue.new(empty_queue)
+        tq.nuke
+        tq.init
+      end
     end
   end
 end

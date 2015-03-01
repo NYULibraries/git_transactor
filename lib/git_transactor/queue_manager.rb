@@ -7,6 +7,10 @@ module GitTransactor
       self.create_structure(root)
       self.new(root)
     end
+    def queue
+      queue_entries
+    end
+
     private
     def self.create_structure(root)
       parent = File.dirname(File.expand_path(root))
@@ -63,6 +67,12 @@ module GitTransactor
     end
     def add_error(key, message)
       @errors[key] = message
+    end
+    def queue_entry_files
+      Dir.glob(File.join(queue_path, '*.csv')).sort
+    end
+    def queue_entries
+      queue_entry_files.collect { |qef| QueueEntry.new(qef) }
     end
   end
 end
