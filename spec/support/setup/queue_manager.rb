@@ -39,6 +39,16 @@ module GitTransactor
         tq.nuke
         tq.init
       end
+      def setup_populated_queue
+        tq = TestQueue.new(populated_queue)
+        tq.nuke
+        tq.init
+        tq.add_failed('rm','apples')
+        tq.add_passed('add','peaches')
+        tq.add_passed('rm','pumpkin')
+        tq.enqueue('add','pie')
+        tq.enqueue('rm','cake')
+      end
     end
   end
 end

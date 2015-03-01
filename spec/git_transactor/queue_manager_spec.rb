@@ -12,6 +12,7 @@ module GitTransactor
     let(:valid_create)    { fixture_root + '/valid_create' }
     let(:invalid_create)  { fixture_root + '/invalid_create/work' }
     let(:empty_queue)     { fixture_root + '/empty_queue' }
+    let(:populated_queue) { fixture_root + '/populated_queue' }
 
     include Setup::QueueManager
 
@@ -73,7 +74,15 @@ module GitTransactor
         it { is_expected.to be == [] }
       end
 
-      pending "when there are entries"
+      context "when there are entries" do
+        before(:each) { setup_populated_queue }
+        it "should have the expected number of entries" do
+          expect(GitTransactor::QueueManager.open(populated_queue).queue.length).to be == 2
+        end
+        it "should return an Array of QueueEntry objects" do
+          expect(GitTransactor::QueueManager.open(populated_queue).queue[0]).to be_an_instance_of(QueueEntry)
+        end
+      end
     end
     describe "#passed" do
       context "when there are no entries" do
