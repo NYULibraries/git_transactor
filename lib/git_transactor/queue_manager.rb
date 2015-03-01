@@ -15,13 +15,17 @@ module GitTransactor
     end
 
     private
+    QUEUE_SUBDIR  = 'queue'
+    PASSED_SUBDIR = 'passed'
+    FAILED_SUBDIR = 'failed'
+
     def self.create_structure(root)
       parent = File.dirname(File.expand_path(root))
       raise ArgumentError.new("#{parent} unwritable") unless File.writable?(parent)
       [root,
-       root + '/queue',
-       root + '/passed',
-       root + '/failed'].each {|d| Dir.mkdir(d)}
+       File.join(root, QUEUE_SUBDIR),
+       File.join(root, PASSED_SUBDIR),
+       File.join(root, FAILED_SUBDIR)].each {|d| Dir.mkdir(d)}
     end
     def initialize(root)
       @root = root
@@ -60,13 +64,13 @@ module GitTransactor
       errors
     end
     def queue_path
-      @queue_path || File.join(@root, 'queue')
+      @queue_path || File.join(@root, QUEUE_SUBDIR)
     end
     def passed_path
-      @passed_path || File.join(@root, 'passed')
+      @passed_path || File.join(@root, PASSED_SUBDIR)
     end
     def failed_path
-      @failed_path || File.join(@root, 'failed')
+      @failed_path || File.join(@root, FAILED_SUBDIR)
     end
     def add_error(key, message)
       @errors[key] = message
