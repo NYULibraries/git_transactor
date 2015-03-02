@@ -17,7 +17,7 @@ module GitTransactor
     let(:tq) { TestQueue.new(work_root) }
     let(:tsd){ TestSourceDir.new(source_path) }
 
-    include SetupUtils
+    include Setup::Base
 
     context "when class is instantiated" do
       subject { base }
@@ -48,7 +48,7 @@ module GitTransactor
 
         it "should move the queue-entry file to the processed directory" do
           base.process_queue
-          expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 1
+          expect(Dir.glob(File.join(work_root, 'passed','*.csv')).length).to be == 1
         end
 
         it "should have the correct commit message" do
@@ -70,7 +70,7 @@ module GitTransactor
 
         it "should move the queue-entry file to the processed directory" do
           base.process_queue
-          expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 1
+          expect(Dir.glob(File.join(work_root, 'passed','*.csv')).length).to be == 1
         end
 
         it "should have the correct commit message" do
@@ -92,7 +92,7 @@ module GitTransactor
 
         it "should move the queue-entry file to the processed directory" do
           base.process_queue
-          expect(Dir.glob(File.join(work_root, 'processed','*.csv')).length).to be == 2
+          expect(Dir.glob(File.join(work_root, 'passed','*.csv')).length).to be == 2
         end
 
         it "should have the correct commit message" do

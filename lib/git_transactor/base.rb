@@ -87,7 +87,7 @@ module GitTransactor
       @commit_msg += (delimiter + "Deleting file #{@file_rel_path}")
     end
     def disposition_entry_file
-      FileUtils.mv(@qe.entry_path, File.join(@work_root, 'processed'))
+      FileUtils.mv(@qe.entry_path, File.join(@work_root, 'passed'))
     end
     def update_num_processed
       @num_processed += 1

@@ -9,6 +9,7 @@
 /spec/fixtures/work/
 /spec/fixtures/local_repo/
 /spec/fixtures/remote_repo/
+/spec/fixtures/queue_manager/populated_queue
 /features/fixtures/repo/
 /features/fixtures/source/
 /features/fixtures/work/

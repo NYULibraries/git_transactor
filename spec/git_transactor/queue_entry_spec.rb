@@ -24,6 +24,9 @@ module GitTransactor
         it "should have the correct entry_path" do
           expect(qe.entry_path).to be == add_entry
         end
+        it "should have the correct entry_name" do
+          expect(qe.entry_name).to be == File.basename(add_entry)
+        end
       end
 
       context "when instantiated with a multi-line entry file" do
