@@ -15,6 +15,7 @@ module GitTransactor
 
       @source_path = params[:source_path]
       @work_root   = params[:work_root]
+      @qm          = QueueManager.open(@work_root)
       @remote_url  = params[:remote_url]
     end
 
@@ -23,8 +24,8 @@ module GitTransactor
     def process_queue
       @num_processed = 0
       @commit_msg   = ''
-      queue_entry_files.each do |entry_file|
-        process_entry(entry_file)
+      @qm.queue.each do |qe|
+        process_entry(qe)
       end
       @repo.commit(@commit_msg) unless @num_processed == 0
       @num_processed
@@ -35,14 +36,14 @@ module GitTransactor
     end
 
     private
-    def process_entry(entry_file)
-        @qe = QueueEntry.new(entry_file)
-        case
-        when @qe.add? then process_add_entry
-        when @qe.rm?  then process_rm_entry
-        else
-          raise ArgumentError.new("unrecognized action: #{@qe.action}")
-        end
+    def process_entry(qe)
+      @qe = qe
+      case
+      when @qe.add? then process_add_entry
+      when @qe.rm?  then process_rm_entry
+      else
+        raise ArgumentError.new("unrecognized action: #{@qe.action}")
+      end
     end
     def process_add_entry
       setup_paths
