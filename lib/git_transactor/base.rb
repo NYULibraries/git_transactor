@@ -1,5 +1,4 @@
 require 'git'
-require 'securerandom'
 
 module GitTransactor
   class Base
