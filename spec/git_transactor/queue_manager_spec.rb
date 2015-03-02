@@ -118,8 +118,19 @@ module GitTransactor
       end
     end
     describe "#disposition" do
-      pending "with a failing queue entry"
-      pending "with a passing queue entry"
+      before(:each) { setup_populated_queue }
+      let(:qm) { GitTransactor::QueueManager.open(populated_queue) }
+      let(:qe) { qm.queue[0] }
+      context "with a failing queue entry" do
+        it "should change the entries as expected" do
+          expect { qm.disposition(qe, :fail) }.to change { qm.queue.length }.by(-1).and change { qm.failed.length }.by(1)
+        end
+      end
+      describe "with a passing queue entry" do
+        it "should change the entries as expected" do
+          expect { qm.disposition(qe, :pass) }.to change { qm.queue.length }.by(-1).and change { qm.passed.length }.by(1)
+        end
+      end
     end
   end
 end

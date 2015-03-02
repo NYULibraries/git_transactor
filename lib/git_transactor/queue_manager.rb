@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module GitTransactor
   class QueueManager
     def self.open(root)
@@ -15,6 +17,12 @@ module GitTransactor
     end
     def failed
       failed_entries
+    end
+    def disposition(qe, result)
+      valid_results = [ :pass, :fail ]
+      raise ArgumentError.new("must be a QueueEntry") unless qe.is_a?(QueueEntry)
+      raise ArgumentError.new("must be in #{valid_results}") unless valid_results.include?(result)
+      mv_entry(qe, result)
     end
 
     private
@@ -95,6 +103,15 @@ module GitTransactor
     end
     def failed_entries
       failed_entry_files.collect { |qef| QueueEntry.new(qef) }
+    end
+    def mv_entry(qe, result)
+      tgtdir = case result
+               when :fail then failed_path
+               when :pass then passed_path
+               else raise "Internal Error: invalid result: #{result}"
+               end
+
+      FileUtils.mv(qe.entry_path, tgtdir)
     end
   end
 end
