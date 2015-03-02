@@ -26,6 +26,7 @@ module GitTransactor
       @commit_msg   = ''
       @qm.queue.each do |qe|
         process_entry(qe)
+        @num_processed += 1
       end
       @repo.commit(@commit_msg) unless @num_processed == 0
       @num_processed
@@ -52,14 +53,12 @@ module GitTransactor
       git_add_file_to_repo
       update_commit_msg_for_add_entry
       disposition_entry_file
-      update_num_processed
     end
     def process_rm_entry
       setup_paths
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
       disposition_entry_file
-      update_num_processed
     end
     def queue_entry_files
       @queue_entry_files ||= Dir.glob(File.join(@work_root, 'queue', '*.csv'))
@@ -89,9 +88,6 @@ module GitTransactor
     end
     def disposition_entry_file
       FileUtils.mv(@qe.entry_path, File.join(@work_root, 'passed'))
-    end
-    def update_num_processed
-      @num_processed += 1
     end
     def delimiter
       @commit_msg.empty? ? '' : ', '
