@@ -19,13 +19,20 @@ module GitTransactor
       @remote_url  = params[:remote_url]
     end
 
-    # TODO: move @num_processed updates to this method
     # returns number of requests processed
     def process_queue
       @num_processed = 0
       @commit_msg   = ''
       @qm.queue.each do |qe|
-        process_entry(qe)
+        result = nil
+        begin
+          process_entry(qe)
+          result = :pass
+        rescue Exception => e
+          @errors << e.message
+          result = :fail
+        end
+        @qm.disposition(qe, result)
         @num_processed += 1
       end
       @repo.commit(@commit_msg) unless @num_processed == 0
@@ -52,13 +59,11 @@ module GitTransactor
       copy_src_file_to_repo
       git_add_file_to_repo
       update_commit_msg_for_add_entry
-      disposition_entry_file
     end
     def process_rm_entry
       setup_paths
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
-      disposition_entry_file
     end
     def queue_entry_files
       @queue_entry_files ||= Dir.glob(File.join(@work_root, 'queue', '*.csv'))
@@ -85,9 +90,6 @@ module GitTransactor
     end
     def update_commit_msg_for_rm_entry
       @commit_msg += (delimiter + "Deleting file #{@file_rel_path}")
-    end
-    def disposition_entry_file
-      FileUtils.mv(@qe.entry_path, File.join(@work_root, 'passed'))
     end
     def delimiter
       @commit_msg.empty? ? '' : ', '
