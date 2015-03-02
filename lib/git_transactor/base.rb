@@ -64,9 +64,6 @@ module GitTransactor
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
     end
-    def queue_entry_files
-      @queue_entry_files ||= Dir.glob(File.join(@work_root, 'queue', '*.csv'))
-    end
     def setup_paths
       @file_rel_path = Utils.source_path_to_repo_path(@qe.path)
       @dir_rel_path  = File.dirname(@file_rel_path)
