@@ -1,9 +1,10 @@
 module GitTransactor
   class QueueEntry
-    attr_accessor :action, :path, :entry_path
+    attr_accessor :action, :path, :entry_path, :entry_name
     ALLOWABLE_ACTIONS = %q(add rm)
     def initialize(entry_path)
       @entry_path = entry_path
+      @entry_name = File.basename(@entry_path)
       File.open(@entry_path) do |f|
         lines = f.readlines
         raise ArgumentError.new("Too many lines in request file: #{@entry_path}") unless lines.length == 1
