@@ -62,6 +62,8 @@ module GitTransactor
         end
       end
       context "when parent directory is unwritabe" do
+        before(:each) { setup_invalid_create }
+        after(:each)  { teardown_invalid_create }
         it "raises an ArgumentError" do
           expect {GitTransactor::QueueManager.create(invalid_create)}.to raise_error(ArgumentError, /unwritable/)
         end

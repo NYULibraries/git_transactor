@@ -1,5 +1,4 @@
 require 'git'
-require 'securerandom'
 
 module GitTransactor
   class Base
@@ -15,16 +14,25 @@ module GitTransactor
 
       @source_path = params[:source_path]
       @work_root   = params[:work_root]
+      @qm          = QueueManager.open(@work_root)
       @remote_url  = params[:remote_url]
     end
 
-    # TODO: move @num_processed updates to this method
     # returns number of requests processed
     def process_queue
       @num_processed = 0
       @commit_msg   = ''
-      queue_entry_files.each do |entry_file|
-        process_entry(entry_file)
+      @qm.queue.each do |qe|
+        result = nil
+        begin
+          process_entry(qe)
+          result = :pass
+        rescue Exception => e
+          @errors << e.message
+          result = :fail
+        end
+        @qm.disposition(qe, result)
+        @num_processed += 1
       end
       @repo.commit(@commit_msg) unless @num_processed == 0
       @num_processed
@@ -35,14 +43,14 @@ module GitTransactor
     end
 
     private
-    def process_entry(entry_file)
-        @qe = QueueEntry.new(entry_file)
-        case
-        when @qe.add? then process_add_entry
-        when @qe.rm?  then process_rm_entry
-        else
-          raise ArgumentError.new("unrecognized action: #{@qe.action}")
-        end
+    def process_entry(qe)
+      @qe = qe
+      case
+      when @qe.add? then process_add_entry
+      when @qe.rm?  then process_rm_entry
+      else
+        raise ArgumentError.new("unrecognized action: #{@qe.action}")
+      end
     end
     def process_add_entry
       setup_paths
@@ -50,18 +58,11 @@ module GitTransactor
       copy_src_file_to_repo
       git_add_file_to_repo
       update_commit_msg_for_add_entry
-      disposition_entry_file
-      update_num_processed
     end
     def process_rm_entry
       setup_paths
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
-      disposition_entry_file
-      update_num_processed
-    end
-    def queue_entry_files
-      @queue_entry_files ||= Dir.glob(File.join(@work_root, 'queue', '*.csv'))
     end
     def setup_paths
       @file_rel_path = Utils.source_path_to_repo_path(@qe.path)
@@ -85,12 +86,6 @@ module GitTransactor
     end
     def update_commit_msg_for_rm_entry
       @commit_msg += (delimiter + "Deleting file #{@file_rel_path}")
-    end
-    def disposition_entry_file
-      FileUtils.mv(@qe.entry_path, File.join(@work_root, 'passed'))
-    end
-    def update_num_processed
-      @num_processed += 1
     end
     def delimiter
       @commit_msg.empty? ? '' : ', '
