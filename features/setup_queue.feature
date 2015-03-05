@@ -6,6 +6,5 @@ Feature: set up queue structure
 
   Scenario: setup the queue
     Given that a parent directory exists
-    And   that directory is writable by the current process
     When  I setup the queue
     Then  I should be able to use the queue
