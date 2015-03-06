@@ -1,6 +1,6 @@
 require 'open3'
 
-Given(/^that a parent directory exists$/) do
+Given(/^that a queue parent directory exists$/) do
   td = TestDir.new('features/fixtures/setup/queue')
   td.nuke
   td.create_root

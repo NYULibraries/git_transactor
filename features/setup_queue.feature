@@ -5,6 +5,6 @@ Feature: set up queue structure
   So that I can run the git_transactor
 
   Scenario: setup the queue
-    Given that a parent directory exists
+    Given that a queue parent directory exists
     When  I setup the queue
     Then  I should be able to use the queue
