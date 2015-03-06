@@ -49,6 +49,9 @@ module GitTransactor
       def teardown_invalid_create
         File.chmod(0755, File.dirname(invalid_create))
       end
+      def teardown_unexecutable_root
+        File.chmod(0755, File.dirname(unexecutable_root))
+      end
       def setup_empty_queue
         tq = TestQueue.new(empty_queue)
         tq.nuke

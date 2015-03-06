@@ -42,6 +42,7 @@ module GitTransactor
         end
         context "when directory is unexecutable" do
           before(:each) { setup_unexecutable_root }
+          after(:each)  { teardown_unexecutable_root }
           it "raises an ArgumentError" do
             expect {GitTransactor::QueueManager.open(unexecutable_root)}.to raise_error(ArgumentError, /unexecutable/)
           end
