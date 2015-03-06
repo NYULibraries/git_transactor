@@ -1,4 +1,4 @@
-Feature: process queue and push using Rake
+Feature: process queue and push using a Rake task
 
   As a User
   I want to use a Rake task to process the queue and push to the remote repository
