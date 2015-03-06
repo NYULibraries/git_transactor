@@ -30,12 +30,14 @@ module GitTransactor
         end
         context "when directory is unreadable" do
           before(:each) { setup_unreadable_root }
+          after(:each)  { teardown_unreadable_root }
           it "raises an ArgumentError" do
             expect {GitTransactor::QueueManager.open(unreadable_root)}.to raise_error(ArgumentError, /unreadable/)
           end
         end
         context "when directory is unwritable" do
           before(:each) { setup_unwritable_root }
+          after(:each)  { teardown_unwritable_root }
           it "raises an ArgumentError" do
             expect {GitTransactor::QueueManager.open(unwritable_root)}.to raise_error(ArgumentError, /unwritable/)
           end

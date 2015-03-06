@@ -12,11 +12,8 @@ module GitTransactor
         tq.init
         File.chmod(0333, unreadable_root)
       end
-      def reset_unreadable_root
-        tq = TestQueue.new(unreadable_root)
-        tq.nuke
-        tq.init
-        File.chmod(0333, unreadable_root)
+      def teardown_unreadable_root
+        File.chmod(0755, unreadable_root)
       end
       def setup_unwritable_root
         tq = TestQueue.new(unwritable_root)
@@ -24,11 +21,17 @@ module GitTransactor
         tq.init
         File.chmod(0555, unwritable_root)
       end
+      def teardown_unwritable_root
+        File.chmod(0755, unwritable_root)
+      end
       def setup_unexecutable_root
         tq = TestQueue.new(unexecutable_root)
         tq.nuke
         tq.init
         File.chmod(0666, unexecutable_root)
+      end
+      def teardown_unexecutable_root
+        File.chmod(0755, unexecutable_root)
       end
       def setup_malformed_root
         tq = TestQueue.new(malformed_root)
@@ -48,9 +51,6 @@ module GitTransactor
       end
       def teardown_invalid_create
         File.chmod(0755, File.dirname(invalid_create))
-      end
-      def teardown_unexecutable_root
-        File.chmod(0755, File.dirname(unexecutable_root))
       end
       def setup_empty_queue
         tq = TestQueue.new(empty_queue)
