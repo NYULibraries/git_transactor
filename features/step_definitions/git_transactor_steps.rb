@@ -1,7 +1,5 @@
 Given(/^that the git repository exists$/) do
   @repo_path   = 'features/fixtures/repo'
-  @source_path = 'features/fixtures/source'
-  @work_root   = 'features/fixtures/work'
   @remote_repo_path = 'features/fixtures/remote_repo/blerf'
 
   @repo = TestRepo.new(@repo_path)
@@ -13,7 +11,7 @@ Given(/^that the git repository exists$/) do
 end
 
 Given(/^a source\-file directory exists$/) do
-  @src_dir = TestSourceDir.new(@source_path)
+  @src_dir = TestSourceDir.new('features/fixtures/source')
   @src_dir.nuke
   @src_dir.init
 end
@@ -45,6 +43,7 @@ Given(/^the file "(.*?)" does not exist in the repository$/) do |rel_path|
 end
 
 Given(/^the request queue exists$/) do
+  @work_root   = 'features/fixtures/work'
   @tq = TestQueue.new(@work_root); @tq.nuke; @tq.init
 end
 
