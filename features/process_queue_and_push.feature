@@ -4,8 +4,7 @@ Feature: process queue and push using Rake
   I want to use a Rake task to process the queue and push to the remote repository
   So that all additions and deletions are applied locall and are reflected in the remote repository
 
-  @wip
-  Scenario: process queue
+  Scenario: process queue and push using Rake task
     Given that the remote repository exists
     And   that the local repository exists and was cloned from the remote repository
     And   that a queue parent directory exists
