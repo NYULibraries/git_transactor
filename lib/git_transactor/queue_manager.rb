@@ -36,7 +36,7 @@ module GitTransactor
       [root,
        File.join(root, QUEUE_SUBDIR),
        File.join(root, PASSED_SUBDIR),
-       File.join(root, FAILED_SUBDIR)].each {|d| Dir.mkdir(d)}
+       File.join(root, FAILED_SUBDIR)].each {|d| Dir.mkdir(d) unless File.directory?(d) }
     end
     def initialize(root)
       @root = root
