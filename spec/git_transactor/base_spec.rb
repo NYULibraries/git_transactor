@@ -20,6 +20,7 @@ module GitTransactor
     include Setup::Base
 
     context "when class is instantiated" do
+      before(:each) { setup_initial_state }
       subject { base }
       it { is_expected.to be_a(GitTransactor::Base) }
     end
