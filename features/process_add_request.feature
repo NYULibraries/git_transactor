@@ -14,3 +14,18 @@ Feature: process add-file-request
     When  I process the queue
     Then  I should see "apple/peaches.txt" in the repository
     And   I should see "Updating file apple/peaches.txt" in the commit log
+
+
+  Scenario: add-file request to existing repo sudbdirectory
+    Given that the git repository exists
+    And   the request queue exists
+    And   a source-file directory exists
+    And   a source-file named "apple/peaches.txt" exists
+    And   the file "apple/peaches.txt" does not exist in the repository
+    And   there is an "add" request for "apple/peaches.txt" in the queue
+    And   a source-file named "apple/pears.txt" exists
+    And   the file "apple/pears.txt" does not exist in the repository
+    And   there is an "add" request for "apple/pears.txt" in the queue
+    When  I process the queue
+    Then  I should see "apple/peaches.txt" in the repository
+    And   I should see "Updating file apple/peaches.txt, Updating file apple/pears.txt" in the commit log
