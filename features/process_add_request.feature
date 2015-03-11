@@ -16,7 +16,7 @@ Feature: process add-file-request
     And   I should see "Updating file apple/peaches.txt" in the commit log
 
 
-  Scenario: add-file request to existing repo sudbdirectory
+  Scenario: add-file request to existing repo subdirectory
     Given that the git repository exists
     And   the request queue exists
     And   a source-file directory exists
