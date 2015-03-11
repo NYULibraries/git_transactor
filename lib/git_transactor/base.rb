@@ -67,10 +67,11 @@ module GitTransactor
     def setup_paths
       @file_rel_path = Utils.source_path_to_repo_path(@qe.path)
       @dir_rel_path  = File.dirname(@file_rel_path)
+      @dir_tgt_path  = File.join(@repo_path, @dir_rel_path)
       @file_tgt_path = File.join(@repo_path, @file_rel_path)
     end
     def create_repo_subdir_if_needed
-      FileUtils.mkdir(File.join(@repo_path, @dir_rel_path)) unless File.directory?(@dir_rel_path)
+      FileUtils.mkdir(@dir_tgt_path) unless File.directory?(@dir_tgt_path)
     end
     def copy_src_file_to_repo
       FileUtils.cp(@qe.path, @file_tgt_path, preserve: true)
