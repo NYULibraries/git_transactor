@@ -10,10 +10,10 @@ namespace :git_transactor do
   end
   desc "Process entries in queue and push to remote"
   task :process_and_push do
-    gt = GitTransactor::Base.new(repo_path:   ENV["LOCAL_REPO"],
-                                 source_path: ENV["SOURCE_PATH"],
-                                 work_root:   ENV["QUEUE_ROOT"],
-                                 remote_url:  ENV["REMOTE_REPO_URL"])
+    gt = GitTransactor::Processor.new(repo_path:   ENV["LOCAL_REPO"],
+                                      source_path: ENV["SOURCE_PATH"],
+                                      work_root:   ENV["QUEUE_ROOT"],
+                                      remote_url:  ENV["REMOTE_REPO_URL"])
     gt.process_queue
     gt.push
   end
