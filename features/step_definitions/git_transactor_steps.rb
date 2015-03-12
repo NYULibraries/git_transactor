@@ -18,7 +18,7 @@ end
 
 
 When(/^I process the queue$/) do
-  gt = GitTransactor::Base.new(repo_path:   @repo.path,
+  gt = GitTransactor::Processor.new(repo_path:   @repo.path,
                                source_path: @src_dir.path,
                                work_root:   @work_root,
                                remote_url:  @remote_repo_path)

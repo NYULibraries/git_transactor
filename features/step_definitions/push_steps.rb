@@ -34,10 +34,10 @@ Given(/^the local repository has changes that the remote repository does not$/) 
 end
 
 When(/^I push the local repository to the remote repository$/) do
-  gt = GitTransactor::Base.new(repo_path:   @repo.path,
-                               source_path: 'features/fixtures/source',
-                               work_root:   'features/fixtures/work',
-                               remote_url:  @remote_repo_path )
+  gt = GitTransactor::Processor.new(repo_path:   @repo.path,
+                                    source_path: 'features/fixtures/source',
+                                    work_root:   'features/fixtures/work',
+                                    remote_url:  @remote_repo_path )
   gt.push
 end
 

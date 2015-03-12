@@ -1,7 +1,7 @@
 require 'git'
 
 module GitTransactor
-  class Base
+  class Processor
     def initialize(params)
       @errors = {}
       [:repo_path, :source_path, :work_root, :remote_url].each do |key|

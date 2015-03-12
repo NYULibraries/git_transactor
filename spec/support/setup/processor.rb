@@ -1,7 +1,7 @@
-# Helper methods to setup state for GitTransactor Base examples
+# Helper methods to setup state for GitTransactor Processor examples
 module GitTransactor
   module Setup
-    module Base
+    module Processor
       def setup_initial_state
         tr = TestRepo.new(repo_path)
         tr.nuke
