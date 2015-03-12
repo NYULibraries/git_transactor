@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = "git_transactor"
   spec.version       = GitTransactor::VERSION
   spec.authors       = ["jgpawletko"]
-  spec.email         = ["jgpawletko@gmail.com"]
+  spec.email         = ["jgpawletko@nyu.edu"]
   spec.summary       = %q{Enqueue and process changes to a git repo.}
   spec.description   = %q{}
-  spec.homepage      = "https://github.com/jgpawletko/git_transactor"
+  spec.homepage      = "https://github.com/NYULibraries/git_transactor"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
