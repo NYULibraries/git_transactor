@@ -75,13 +75,13 @@ module GitTransactor
       errors
     end
     def queue_path
-      @queue_path || File.join(@root, QUEUE_SUBDIR)
+      @queue_path ||= File.join(@root, QUEUE_SUBDIR)
     end
     def passed_path
-      @passed_path || File.join(@root, PASSED_SUBDIR)
+      @passed_path ||= File.join(@root, PASSED_SUBDIR)
     end
     def failed_path
-      @failed_path || File.join(@root, FAILED_SUBDIR)
+      @failed_path ||= File.join(@root, FAILED_SUBDIR)
     end
     def add_error(key, message)
       @errors[key] = message
