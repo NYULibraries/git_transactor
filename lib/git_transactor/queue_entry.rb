@@ -1,7 +1,7 @@
 module GitTransactor
   class QueueEntry
     attr_accessor :action, :path, :entry_path, :entry_name
-    ALLOWABLE_ACTIONS = %q(add rm)
+    ALLOWABLE_ACTIONS = %w(add rm)
     def initialize(entry_path)
       @entry_path = entry_path
       @entry_name = File.basename(@entry_path)
