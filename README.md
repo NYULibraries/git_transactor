@@ -34,9 +34,9 @@ queue entry file in the order of the queue entry filenames from lowest
 to highest, committing each change to the local repository.
 
 If a commit is successful, the queue entry file is moved to the
-`work/processed/` subdirectory.
+`work/passed/` subdirectory.
 
-If a commit fails, the queue entry file is moved to the `work/error`
+If a commit fails, the queue entry file is moved to the `work/failed`
 subdirectory.
 
 After all commits have been made to the local repository, the updated
@@ -67,5 +67,5 @@ Each queue entry file is named per the following template:
 A queue-entry file contains a single line of comma-separated values
 that conform to the following template:
 
-`<command>,<absolute path to file being managed>`
+`<command>,<absolute path to file being managed>`  
 `<command>` must be either `add` or `rm`
