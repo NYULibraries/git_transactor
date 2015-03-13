@@ -7,7 +7,6 @@ module GitTransactor
       check_params!
 
       @repo        = Git.open(repo_path)
-      @remote_url  = params[:remote_url]
     end
 
     # returns number of requests processed
@@ -31,7 +30,7 @@ module GitTransactor
     end
 
     def push
-      @repo.push(@remote_url)
+      @repo.push(remote_url)
     end
 
 private
@@ -116,5 +115,11 @@ private
     def work_root
       @params[:work_root]
     end
+
+    def remote_url
+      @params[:remote_url]
+    end
+
+
   end
 end
