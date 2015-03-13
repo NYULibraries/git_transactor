@@ -14,7 +14,6 @@ module GitTransactor
 
       @source_path = params[:source_path]
       @work_root   = params[:work_root]
-      @qm          = QueueManager.open(@work_root)
       @remote_url  = params[:remote_url]
     end
 
@@ -22,7 +21,7 @@ module GitTransactor
     def process_queue
       num_processed = 0
       @commit_msg   = ''
-      @qm.queue.each do |qe|
+      qm.queue.each do |qe|
         result = nil
         begin
           process_entry(qe)
@@ -31,7 +30,7 @@ module GitTransactor
           @errors << e.message
           result = :fail
         end
-        @qm.disposition(qe, result)
+        qm.disposition(qe, result)
         num_processed += 1
       end
       @repo.commit(@commit_msg) unless num_processed == 0
@@ -100,6 +99,10 @@ private
 
     def delimiter
       @commit_msg.empty? ? '' : ', '
+    end
+
+    def qm
+      @qm ||= QueueManager.open(@work_root)
     end
   end
 end
