@@ -66,8 +66,7 @@ private
     end
 
     def setup_paths
-      @dir_rel_path  = File.dirname(file_rel_path)
-      @dir_tgt_path  = File.join(repo_path, @dir_rel_path)
+      @dir_tgt_path  = File.join(repo_path, dir_rel_path)
       @file_tgt_path = File.join(repo_path, file_rel_path)
     end
 
@@ -137,6 +136,10 @@ private
     #
     def file_rel_path
       Utils.source_path_to_repo_path(@qe.path)
+    end
+
+    def dir_rel_path
+      File.dirname(file_rel_path)
     end
   end
 end
