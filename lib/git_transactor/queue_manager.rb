@@ -98,7 +98,7 @@ private
     end
 
     def queue_entry_files
-      Dir.glob(File.join(queue_path, '*.csv')).sort
+      entry_files(queue_path)
     end
 
     def queue_entries
@@ -106,7 +106,7 @@ private
     end
 
     def passed_entry_files
-      Dir.glob(File.join(passed_path, '*.csv')).sort
+      entry_files(passed_path)
     end
 
     def passed_entries
@@ -114,7 +114,7 @@ private
     end
 
     def failed_entry_files
-      Dir.glob(File.join(failed_path, '*.csv')).sort
+      entry_files(failed_path)
     end
 
     def failed_entries
@@ -132,6 +132,9 @@ private
     end
     def errors
       @errors ||= {}
+    end
+    def entry_files(path)
+      Dir.glob(File.join(path, '*.csv')).sort
     end
   end
 end
