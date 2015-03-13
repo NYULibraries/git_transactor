@@ -20,7 +20,7 @@ module GitTransactor
 
     # returns number of requests processed
     def process_queue
-      @num_processed = 0
+      num_processed = 0
       @commit_msg   = ''
       @qm.queue.each do |qe|
         result = nil
@@ -32,10 +32,10 @@ module GitTransactor
           result = :fail
         end
         @qm.disposition(qe, result)
-        @num_processed += 1
+        num_processed += 1
       end
-      @repo.commit(@commit_msg) unless @num_processed == 0
-      @num_processed
+      @repo.commit(@commit_msg) unless num_processed == 0
+      num_processed
     end
 
     def push
