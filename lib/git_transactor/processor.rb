@@ -7,8 +7,6 @@ module GitTransactor
       check_params!
 
       @repo        = Git.open(repo_path)
-
-      @work_root   = params[:work_root]
       @remote_url  = params[:remote_url]
     end
 
@@ -104,7 +102,7 @@ private
     end
 
     def qm
-      @qm ||= QueueManager.open(@work_root)
+      @qm ||= QueueManager.open(work_root)
     end
 
     def errors
@@ -113,6 +111,10 @@ private
 
     def repo_path
       @params[:repo_path]
+    end
+
+    def work_root
+      @params[:work_root]
     end
   end
 end
