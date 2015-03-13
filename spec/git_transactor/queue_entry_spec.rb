@@ -10,6 +10,13 @@ module GitTransactor
     let(:bad_delimiter_entry) { File.join(fixture_root, 'bad-delimiter-entry.csv') }
     let(:multi_delimiter_entry) { File.join(fixture_root, 'multi-delimiter-entry.csv') }
 
+
+    describe "class constant" do
+      it "should have the expected value" do
+        expect(GitTransactor::QueueEntry::FILE_GLOB).to be == '*.csv'
+      end
+    end
+
     describe ".new" do
       context "when class is instantiated" do
         subject(:qe) { QueueEntry.new(add_entry) }

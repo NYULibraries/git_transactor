@@ -1,5 +1,6 @@
 module GitTransactor
   class QueueEntry
+    FILE_GLOB = '*.csv'
     attr_accessor :action, :path, :entry_path, :entry_name
     ALLOWABLE_ACTIONS = %w(add rm)
     def initialize(entry_path)
