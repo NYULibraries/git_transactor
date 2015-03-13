@@ -2,22 +2,28 @@ require 'fileutils'
 
 module GitTransactor
   class QueueManager
+
     def self.open(root)
       self.new(root)
     end
+
     def self.create(root)
       self.create_structure(root)
       self.new(root)
     end
+
     def queue
       entries(:queue_entry_files)
     end
+
     def passed
       entries(:passed_entry_files)
     end
+
     def failed
       entries(:failed_entry_files)
     end
+
     def disposition(qe, result)
       valid_results = [ :pass, :fail ]
       raise ArgumentError.new("must be a QueueEntry") unless qe.is_a?(QueueEntry)
@@ -118,12 +124,15 @@ private
 
       FileUtils.mv(qe.entry_path, tgtdir)
     end
+
     def errors
       @errors ||= {}
     end
+
     def entry_files(path)
       Dir.glob(File.join(path, QueueEntry::FILE_GLOB)).sort
     end
+
     def entries(method)
       self.send(method).collect { |qef| QueueEntry.new(qef) }
     end
