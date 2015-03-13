@@ -6,8 +6,7 @@ module GitTransactor
       @params = params
       check_params!
 
-      @repo_path   = params[:repo_path]
-      @repo        = Git.open(@repo_path)
+      @repo        = Git.open(repo_path)
 
       @source_path = params[:source_path]
       @work_root   = params[:work_root]
@@ -73,8 +72,8 @@ private
     def setup_paths
       @file_rel_path = Utils.source_path_to_repo_path(@qe.path)
       @dir_rel_path  = File.dirname(@file_rel_path)
-      @dir_tgt_path  = File.join(@repo_path, @dir_rel_path)
-      @file_tgt_path = File.join(@repo_path, @file_rel_path)
+      @dir_tgt_path  = File.join(repo_path, @dir_rel_path)
+      @file_tgt_path = File.join(repo_path, @file_rel_path)
     end
 
     def create_repo_subdir_if_needed
@@ -111,6 +110,10 @@ private
 
     def errors
       @errors ||= {}
+    end
+
+    def repo_path
+      @params[:repo_path]
     end
   end
 end
