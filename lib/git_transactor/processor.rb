@@ -119,17 +119,22 @@ private
       @params[:remote_url]
     end
 
-    # Return the relative path of the file in the repository
+    # Return the relative path of the source file in the
+    #   Git repository
     #
-    # This performs a conversion between the absolute path of a file
-    # to be added or removed to the file's path relative path
-    # in the repo.
+    # This method converts the absolute path of a source file
+    # to the file's path relative path in the repo.
     #
-    # for example, if your repo is structured as:
-    #   <repo root>/a/b/c.xml
-    # and the absolute path of your file is:
-    #  /a/really/cool/path/ead/a/b/c.xml
-    # this method performs the conversion
+    # for example, if the absolute path of the file you're adding
+    # is:
+    #         /a/really/cool/path/ead/a/b/c.xml
+    #
+    # and the repo has the following structure:
+    #        <repo root>/a/b/
+    #
+    # then this method returns
+    #         a/b/c.xml
+    #
     def file_rel_path
       Utils.source_path_to_repo_path(@qe.path)
     end
