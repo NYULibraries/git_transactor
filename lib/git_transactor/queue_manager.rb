@@ -102,7 +102,7 @@ private
     end
 
     def queue_entries
-      queue_entry_files.collect { |qef| QueueEntry.new(qef) }
+      entries(:queue_entry_files)
     end
 
     def passed_entry_files
@@ -110,7 +110,7 @@ private
     end
 
     def passed_entries
-      passed_entry_files.collect { |qef| QueueEntry.new(qef) }
+      entries(:passed_entry_files)
     end
 
     def failed_entry_files
@@ -118,7 +118,7 @@ private
     end
 
     def failed_entries
-      failed_entry_files.collect { |qef| QueueEntry.new(qef) }
+      entries(:failed_entry_files)
     end
 
     def mv_entry(qe, result)
@@ -135,6 +135,9 @@ private
     end
     def entry_files(path)
       Dir.glob(File.join(path, '*.csv')).sort
+    end
+    def entries(method)
+      self.send(method).collect { |qef| QueueEntry.new(qef) }
     end
   end
 end
