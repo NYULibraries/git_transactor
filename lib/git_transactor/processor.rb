@@ -118,6 +118,18 @@ private
     def remote_url
       @params[:remote_url]
     end
+
+    # Return the relative path of the file in the repository
+    #
+    # This performs a conversion between the absolute path of a file
+    # to be added or removed to the file's path relative path
+    # in the repo.
+    #
+    # for example, if your repo is structured as:
+    #   <repo root>/a/b/c.xml
+    # and the absolute path of your file is:
+    #  /a/really/cool/path/ead/a/b/c.xml
+    # this method performs the conversion
     def file_rel_path
       Utils.source_path_to_repo_path(@qe.path)
     end
