@@ -66,7 +66,6 @@ private
     end
 
     def setup_paths
-      @file_tgt_path = File.join(repo_path, file_rel_path)
     end
 
     def create_repo_subdir_if_needed
@@ -74,7 +73,7 @@ private
     end
 
     def copy_src_file_to_repo
-      FileUtils.cp(@qe.path, @file_tgt_path, preserve: true)
+      FileUtils.cp(@qe.path, file_tgt_path, preserve: true)
     end
 
     def git_add_file_to_repo
@@ -148,6 +147,11 @@ private
       File.join(repo_path, dir_rel_path)
     end
 
-
+    # return the path for the source file in the
+    #   Git repository
+    #
+    def file_tgt_path
+      File.join(repo_path, file_rel_path)
+    end
   end
 end
