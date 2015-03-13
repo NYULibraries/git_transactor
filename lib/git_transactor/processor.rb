@@ -52,7 +52,6 @@ private
     end
 
     def process_add_entry
-      setup_paths
       create_repo_subdir_if_needed
       copy_src_file_to_repo
       git_add_file_to_repo
@@ -60,12 +59,8 @@ private
     end
 
     def process_rm_entry
-      setup_paths
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
-    end
-
-    def setup_paths
     end
 
     def create_repo_subdir_if_needed
