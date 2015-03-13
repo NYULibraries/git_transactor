@@ -122,7 +122,7 @@ private
       @errors ||= {}
     end
     def entry_files(path)
-      Dir.glob(File.join(path, '*.csv')).sort
+      Dir.glob(File.join(path, QueueEntry::FILE_GLOB)).sort
     end
     def entries(method)
       self.send(method).collect { |qef| QueueEntry.new(qef) }
