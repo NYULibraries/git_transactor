@@ -66,10 +66,9 @@ private
     end
 
     def setup_paths
-      @file_rel_path = Utils.source_path_to_repo_path(@qe.path)
-      @dir_rel_path  = File.dirname(@file_rel_path)
+      @dir_rel_path  = File.dirname(file_rel_path)
       @dir_tgt_path  = File.join(repo_path, @dir_rel_path)
-      @file_tgt_path = File.join(repo_path, @file_rel_path)
+      @file_tgt_path = File.join(repo_path, file_rel_path)
     end
 
     def create_repo_subdir_if_needed
@@ -81,19 +80,19 @@ private
     end
 
     def git_add_file_to_repo
-      @repo.add(@file_rel_path)
+      @repo.add(file_rel_path)
     end
 
     def update_commit_msg_for_add_entry
-      @commit_msg += (delimiter + "Updating file #{@file_rel_path}")
+      @commit_msg += (delimiter + "Updating file #{file_rel_path}")
     end
 
     def git_rm_file_from_repo
-      @repo.remove(@file_rel_path)
+      @repo.remove(file_rel_path)
     end
 
     def update_commit_msg_for_rm_entry
-      @commit_msg += (delimiter + "Deleting file #{@file_rel_path}")
+      @commit_msg += (delimiter + "Deleting file #{file_rel_path}")
     end
 
     def delimiter
@@ -119,7 +118,8 @@ private
     def remote_url
       @params[:remote_url]
     end
-
-
+    def file_rel_path
+      Utils.source_path_to_repo_path(@qe.path)
+    end
   end
 end
