@@ -104,5 +104,9 @@ private
     def qm
       @qm ||= QueueManager.open(@work_root)
     end
+
+    def errors
+      @errors ||= {}
+    end
   end
 end
