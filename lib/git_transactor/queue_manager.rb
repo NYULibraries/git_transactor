@@ -41,7 +41,6 @@ private
 
     def initialize(root)
       @root = root
-      @errors = {}
       check_structure
     end
 
@@ -50,7 +49,7 @@ private
       check_queue_dir
       check_passed_dir
       check_failed_dir
-      raise ArgumentError.new(@errors) unless @errors.empty?
+      raise ArgumentError.new(errors) unless errors.empty?
     end
 
     def check_root_dir
@@ -74,12 +73,12 @@ private
     end
 
     def check_dir(path)
-      errors = [ ]
-      errors << 'does not exist' unless File.directory?(path)
-      errors << 'unreadable'     unless File.readable?(path)
-      errors << 'unwritable'     unless File.writable?(path)
-      errors << 'unexecutable'   unless File.executable?(path)
-      errors
+      l_errors = [ ]
+      l_errors << 'does not exist' unless File.directory?(path)
+      l_errors << 'unreadable'     unless File.readable?(path)
+      l_errors << 'unwritable'     unless File.writable?(path)
+      l_errors << 'unexecutable'   unless File.executable?(path)
+      l_errors
     end
 
     def queue_path
@@ -95,7 +94,7 @@ private
     end
 
     def add_error(key, message)
-      @errors[key] = message
+      errors[key] = message
     end
 
     def queue_entry_files
@@ -130,6 +129,9 @@ private
                end
 
       FileUtils.mv(qe.entry_path, tgtdir)
+    end
+    def errors
+      @errors ||= {}
     end
   end
 end
