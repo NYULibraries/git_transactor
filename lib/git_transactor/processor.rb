@@ -66,12 +66,11 @@ private
     end
 
     def setup_paths
-      @dir_tgt_path  = File.join(repo_path, dir_rel_path)
       @file_tgt_path = File.join(repo_path, file_rel_path)
     end
 
     def create_repo_subdir_if_needed
-      FileUtils.mkdir(@dir_tgt_path) unless File.directory?(@dir_tgt_path)
+      FileUtils.mkdir(dir_tgt_path) unless File.directory?(dir_tgt_path)
     end
 
     def copy_src_file_to_repo
@@ -141,5 +140,14 @@ private
     def dir_rel_path
       File.dirname(file_rel_path)
     end
+
+    # return the parent directory for the source file in the
+    #   Git repository
+    #
+    def dir_tgt_path
+      File.join(repo_path, dir_rel_path)
+    end
+
+
   end
 end
