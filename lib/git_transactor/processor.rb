@@ -3,11 +3,8 @@ require 'git'
 module GitTransactor
   class Processor
     def initialize(params)
-      @errors = {}
-      [:repo_path, :source_path, :work_root, :remote_url].each do |key|
-        @errors[key] = "missing #{key}:" if params[key].nil?
-      end
-      raise ArgumentError.new(@errors.to_s) unless @errors.empty?
+      @params = params
+      check_params!
 
       @repo_path   = params[:repo_path]
       @repo        = Git.open(@repo_path)
@@ -27,7 +24,7 @@ module GitTransactor
           process_entry(qe)
           result = :pass
         rescue Exception => e
-          @errors << e.message
+          errors << e.message
           result = :fail
         end
         qm.disposition(qe, result)
@@ -42,6 +39,13 @@ module GitTransactor
     end
 
 private
+    def check_params!
+      [:repo_path, :source_path, :work_root, :remote_url].each do |key|
+        errors[key] = "missing #{key}:" if @params[key].nil?
+      end
+      raise ArgumentError.new(errors.to_s) unless errors.empty?
+    end
+
     def process_entry(qe)
       @qe = qe
       case
