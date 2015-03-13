@@ -8,7 +8,6 @@ module GitTransactor
 
       @repo        = Git.open(repo_path)
 
-      @source_path = params[:source_path]
       @work_root   = params[:work_root]
       @remote_url  = params[:remote_url]
     end
