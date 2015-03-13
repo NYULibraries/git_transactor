@@ -5,8 +5,6 @@ module GitTransactor
     def initialize(params)
       @params = params
       check_params!
-
-      @repo        = Git.open(repo_path)
     end
 
     # returns number of requests processed
@@ -25,12 +23,12 @@ module GitTransactor
         qm.disposition(qe, result)
         num_processed += 1
       end
-      @repo.commit(@commit_msg) unless num_processed == 0
+      repo.commit(@commit_msg) unless num_processed == 0
       num_processed
     end
 
     def push
-      @repo.push(remote_url)
+      repo.push(remote_url)
     end
 
 private
@@ -72,7 +70,7 @@ private
     end
 
     def git_add_file_to_repo
-      @repo.add(file_rel_path)
+      repo.add(file_rel_path)
     end
 
     def update_commit_msg_for_add_entry
@@ -80,7 +78,7 @@ private
     end
 
     def git_rm_file_from_repo
-      @repo.remove(file_rel_path)
+      repo.remove(file_rel_path)
     end
 
     def update_commit_msg_for_rm_entry
@@ -89,6 +87,10 @@ private
 
     def delimiter
       @commit_msg.empty? ? '' : ', '
+    end
+
+    def repo
+      @repo ||= Git.open(repo_path)
     end
 
     def qm
