@@ -10,13 +10,13 @@ module GitTransactor
       self.new(root)
     end
     def queue
-      queue_entries
+      entries(:queue_entry_files)
     end
     def passed
-      passed_entries
+      entries(:passed_entry_files)
     end
     def failed
-      failed_entries
+      entries(:failed_entry_files)
     end
     def disposition(qe, result)
       valid_results = [ :pass, :fail ]
@@ -101,24 +101,12 @@ private
       entry_files(queue_path)
     end
 
-    def queue_entries
-      entries(:queue_entry_files)
-    end
-
     def passed_entry_files
       entry_files(passed_path)
     end
 
-    def passed_entries
-      entries(:passed_entry_files)
-    end
-
     def failed_entry_files
       entry_files(failed_path)
-    end
-
-    def failed_entries
-      entries(:failed_entry_files)
     end
 
     def mv_entry(qe, result)
