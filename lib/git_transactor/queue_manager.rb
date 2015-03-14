@@ -2,22 +2,28 @@ require 'fileutils'
 
 module GitTransactor
   class QueueManager
+
     def self.open(root)
       self.new(root)
     end
+
     def self.create(root)
       self.create_structure(root)
       self.new(root)
     end
+
     def queue
-      queue_entries
+      entries(:queue_entry_files)
     end
+
     def passed
-      passed_entries
+      entries(:passed_entry_files)
     end
+
     def failed
-      failed_entries
+      entries(:failed_entry_files)
     end
+
     def disposition(qe, result)
       valid_results = [ :pass, :fail ]
       raise ArgumentError.new("must be a QueueEntry") unless qe.is_a?(QueueEntry)
@@ -41,7 +47,6 @@ private
 
     def initialize(root)
       @root = root
-      @errors = {}
       check_structure
     end
 
@@ -50,7 +55,7 @@ private
       check_queue_dir
       check_passed_dir
       check_failed_dir
-      raise ArgumentError.new(@errors) unless @errors.empty?
+      raise ArgumentError.new(errors) unless errors.empty?
     end
 
     def check_root_dir
@@ -74,12 +79,12 @@ private
     end
 
     def check_dir(path)
-      errors = [ ]
-      errors << 'does not exist' unless File.directory?(path)
-      errors << 'unreadable'     unless File.readable?(path)
-      errors << 'unwritable'     unless File.writable?(path)
-      errors << 'unexecutable'   unless File.executable?(path)
-      errors
+      l_errors = [ ]
+      l_errors << 'does not exist' unless File.directory?(path)
+      l_errors << 'unreadable'     unless File.readable?(path)
+      l_errors << 'unwritable'     unless File.writable?(path)
+      l_errors << 'unexecutable'   unless File.executable?(path)
+      l_errors
     end
 
     def queue_path
@@ -95,31 +100,19 @@ private
     end
 
     def add_error(key, message)
-      @errors[key] = message
+      errors[key] = message
     end
 
     def queue_entry_files
-      Dir.glob(File.join(queue_path, '*.csv')).sort
-    end
-
-    def queue_entries
-      queue_entry_files.collect { |qef| QueueEntry.new(qef) }
+      entry_files(queue_path)
     end
 
     def passed_entry_files
-      Dir.glob(File.join(passed_path, '*.csv')).sort
-    end
-
-    def passed_entries
-      passed_entry_files.collect { |qef| QueueEntry.new(qef) }
+      entry_files(passed_path)
     end
 
     def failed_entry_files
-      Dir.glob(File.join(failed_path, '*.csv')).sort
-    end
-
-    def failed_entries
-      failed_entry_files.collect { |qef| QueueEntry.new(qef) }
+      entry_files(failed_path)
     end
 
     def mv_entry(qe, result)
@@ -130,6 +123,18 @@ private
                end
 
       FileUtils.mv(qe.entry_path, tgtdir)
+    end
+
+    def errors
+      @errors ||= {}
+    end
+
+    def entry_files(path)
+      Dir.glob(File.join(path, QueueEntry::FILE_GLOB)).sort
+    end
+
+    def entries(method)
+      self.send(method).collect { |qef| QueueEntry.new(qef) }
     end
   end
 end
