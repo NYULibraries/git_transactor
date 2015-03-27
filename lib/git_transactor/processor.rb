@@ -10,20 +10,22 @@ module GitTransactor
     # returns number of requests processed
     def process_queue
       num_processed = 0
-      @commit_msg   = ''
-      qm.queue.each do |qe|
-        result = nil
-        begin
-          process_entry(qe)
-          result = :pass
-        rescue Exception => e
-          errors << e.message
-          result = :fail
+      lock do
+        @commit_msg   = ''
+        qm.queue.each do |qe|
+          result = nil
+          begin
+            process_entry(qe)
+            result = :pass
+          rescue Exception => e
+            errors << e.message
+            result = :fail
+          end
+          qm.disposition(qe, result)
+          num_processed += 1
         end
-        qm.disposition(qe, result)
-        num_processed += 1
+        repo.commit(@commit_msg) unless num_processed == 0
       end
-      repo.commit(@commit_msg) unless num_processed == 0
       num_processed
     end
 
@@ -31,7 +33,18 @@ module GitTransactor
       repo.push(remote_url)
     end
 
-private
+    private
+
+    # lock queue manager during block execution
+    def lock
+      qm.lock!
+      begin
+        yield
+      ensure
+        qm.unlock
+      end
+    end
+
     def check_params!
       [:repo_path, :source_path, :work_root, :remote_url].each do |key|
         errors[key] = "missing #{key}:" if @params[key].nil?

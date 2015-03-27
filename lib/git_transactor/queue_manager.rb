@@ -1,8 +1,9 @@
 require 'fileutils'
 
 module GitTransactor
-  class QueueManager
+  LockError = Class.new(StandardError)
 
+  class QueueManager
     def self.open(root)
       self.new(root)
     end
@@ -29,6 +30,19 @@ module GitTransactor
       raise ArgumentError.new("must be a QueueEntry") unless qe.is_a?(QueueEntry)
       raise ArgumentError.new("must be in #{valid_results}") unless valid_results.include?(result)
       mv_entry(qe, result)
+    end
+
+    def locked?
+      File.exists?(lock_file)
+    end
+
+    def lock!
+      raise LockError.new("Queue is already in use.") if locked?
+      File.open(lock_file, "w") { |f| f.puts($PID) }
+    end
+
+    def unlock
+      FileUtils.rm(lock_file) if locked?
     end
 
 private
@@ -135,6 +149,10 @@ private
 
     def entries(method)
       self.send(method).collect { |qef| QueueEntry.new(qef) }
+    end
+
+    def lock_file
+      @lock_file ||= File.join(@root, 'git_transactor_lock.pid')
     end
   end
 end
