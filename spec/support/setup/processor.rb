@@ -82,6 +82,17 @@ module GitTransactor
         local_repo.add('unicorns.txt')
         local_repo.commit('add unicorns and rainbows!')
       end
+
+      def setup_locked_state
+        sub_directory = 'jgp'
+        src_file = "interesting-stuff.xml"
+
+        tsd.create_sub_directory(sub_directory)
+        tsd.create_file(File.join(sub_directory, src_file), "#{src_file}")
+        tq.enqueue('add', File.expand_path(File.join(tsd.path, sub_directory, src_file)))
+        qm = GitTransactor::QueueManager.open(tq.path)
+        qm.lock!
+      end
     end
   end
 end

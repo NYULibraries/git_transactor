@@ -26,7 +26,7 @@ module GitTransactor
     end
 
 
-    describe '#process' do
+    describe '#process_queue' do
       before(:each) do
         setup_initial_state
       end
@@ -122,6 +122,17 @@ module GitTransactor
           processor.process_queue
           g = Git.open(repo_path)
           expect(g.log[0].message).to be == 'Updating file jgp/interesting-stuff.xml, Updating file khq/more-interesting-stuff.xml'
+        end
+      end
+
+
+      context "with a locked queue" do
+        before(:each) do
+          setup_locked_state
+        end
+
+        it "should raise a LockError" do
+          expect { processor.process_queue }.to raise_error(LockError)
         end
       end
     end
