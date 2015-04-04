@@ -21,7 +21,7 @@ class TestQueue < TestDir
   def add_passed(action, source_path)
     add_entry(action, source_path, @passed_dir)
   end
-  private
+private
   def add_entry(action, source_path, tgt_path)
     raise ArgumentError.new("invalid action: #{action}") unless
       ['add','rm'].include?(action)
