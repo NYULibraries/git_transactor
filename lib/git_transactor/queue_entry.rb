@@ -13,8 +13,9 @@ module GitTransactor
         lines = f.readlines
         fail ArgumentError, "Too many lines in request: #{@entry_path}" unless
           lines.length == 1
-        @action, @path = lines[0].chomp.split(',',2)
-        fail ArgumentError.new("Invalid action: #{@action}") unless ALLOWABLE_ACTIONS.include?(@action)
+        @action, @path = lines[0].chomp.split(',', 2)
+        fail ArgumentError, "Invalid action: #{@action}" unless
+          ALLOWABLE_ACTIONS.include?(@action)
       end
 
       def add?
