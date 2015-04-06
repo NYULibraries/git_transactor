@@ -33,7 +33,7 @@ module GitTransactor
     end
 
     def locked?
-      File.exists?(lock_file)
+      File.exist?(lock_file)
     end
 
     def lock!
