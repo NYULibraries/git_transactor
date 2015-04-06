@@ -4,6 +4,8 @@ module GitTransactor
   ##
   # This class processes GitTransactor queue entries
   class Processor
+    include Utils
+
     def initialize(params)
       @params = params
       check_params!
@@ -145,7 +147,7 @@ private
     #         a/b/c.xml
     #
     def file_rel_path
-      Utils.source_path_to_repo_path(@qe.path)
+      source_path_to_repo_path(@qe.path)
     end
 
     def dir_rel_path

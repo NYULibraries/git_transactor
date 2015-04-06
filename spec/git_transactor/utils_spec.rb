@@ -7,8 +7,10 @@ module GitTransactor
     let(:source_file_path) { '/a/b/c/d/foo.xml' }
 
     describe '.source_path_to_repo_path' do
+      let(:dummy_class) { Class.new { include Utils } }
+      let(:o) { dummy_class.new }
       it "should perform the correct conversion" do
-        expect(Utils.source_path_to_repo_path(source_file_path)).to be == repo_file_path
+        expect(o.send(:source_path_to_repo_path, source_file_path)).to be == repo_file_path
       end
     end
   end
