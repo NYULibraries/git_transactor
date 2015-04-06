@@ -1,6 +1,8 @@
 require 'git'
 
 module GitTransactor
+  ##
+  # This class processes GitTransactor queue entries
   class Processor
     def initialize(params)
       @params = params
@@ -17,7 +19,7 @@ module GitTransactor
           begin
             process_entry(qe)
             result = :pass
-          rescue Exception => e
+          rescue StandardError => e
             errors << e.message
             result = :fail
           end
@@ -49,7 +51,7 @@ private
       [:repo_path, :source_path, :work_root, :remote_url].each do |key|
         errors[key] = "missing #{key}:" if @params[key].nil?
       end
-      raise ArgumentError.new(errors.to_s) unless errors.empty?
+      fail ArgumentError, errors.to_s unless errors.empty?
     end
 
     def process_entry(qe)
@@ -58,7 +60,7 @@ private
       when @qe.add? then process_add_entry
       when @qe.rm?  then process_rm_entry
       else
-        raise ArgumentError.new("unrecognized action: #{@qe.action}")
+        fail ArgumentError, "unrecognized action: #{@qe.action}"
       end
     end
 

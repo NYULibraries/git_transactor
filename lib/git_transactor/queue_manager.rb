@@ -5,12 +5,12 @@ module GitTransactor
 
   class QueueManager
     def self.open(root)
-      self.new(root)
+      new(root)
     end
 
     def self.create(root)
-      self.create_structure(root)
-      self.new(root)
+      create_structure(root)
+      new(root)
     end
 
     def queue
@@ -26,19 +26,20 @@ module GitTransactor
     end
 
     def disposition(qe, result)
-      valid_results = [ :pass, :fail ]
-      raise ArgumentError.new("must be a QueueEntry") unless qe.is_a?(QueueEntry)
-      raise ArgumentError.new("must be in #{valid_results}") unless valid_results.include?(result)
+      valid_results = [:pass, :fail]
+      fail ArgumentError, 'must be a QueueEntry' unless qe.is_a?(QueueEntry)
+      fail ArgumentError, "must be in #{valid_results}" unless
+        valid_results.include?(result)
       mv_entry(qe, result)
     end
 
     def locked?
-      File.exists?(lock_file)
+      File.exist?(lock_file)
     end
 
     def lock!
-      raise LockError.new("Queue is already in use.") if locked?
-      File.open(lock_file, "w") { |f| f.puts($PID) }
+      fail LockError, 'Queue is already in use.' if locked?
+      File.open(lock_file, 'w') { |f| f.puts($PID) }
     end
 
     def unlock
@@ -46,17 +47,20 @@ module GitTransactor
     end
 
 private
+
     QUEUE_SUBDIR  = 'queue'
     PASSED_SUBDIR = 'passed'
     FAILED_SUBDIR = 'failed'
 
     def self.create_structure(root)
       parent = File.dirname(File.expand_path(root))
-      raise ArgumentError.new("#{parent} unwritable") unless File.writable?(parent)
+      fail ArgumentError, "#{parent} unwritable" unless File.writable?(parent)
       [root,
        File.join(root, QUEUE_SUBDIR),
        File.join(root, PASSED_SUBDIR),
-       File.join(root, FAILED_SUBDIR)].each {|d| Dir.mkdir(d) unless File.directory?(d) }
+       File.join(root, FAILED_SUBDIR)].each do |d|
+        Dir.mkdir(d) unless File.directory?(d)
+      end
     end
 
     def initialize(root)
@@ -69,7 +73,7 @@ private
       check_queue_dir
       check_passed_dir
       check_failed_dir
-      raise ArgumentError.new(errors) unless errors.empty?
+      fail ArgumentError, errors unless errors.empty?
     end
 
     def check_root_dir
@@ -93,7 +97,7 @@ private
     end
 
     def check_dir(path)
-      l_errors = [ ]
+      l_errors = []
       l_errors << 'does not exist' unless File.directory?(path)
       l_errors << 'unreadable'     unless File.readable?(path)
       l_errors << 'unwritable'     unless File.writable?(path)
@@ -133,7 +137,7 @@ private
       tgtdir = case result
                when :fail then failed_path
                when :pass then passed_path
-               else raise "Internal Error: invalid result: #{result}"
+               else fail "Internal Error: invalid result: #{result}"
                end
 
       FileUtils.mv(qe.entry_path, tgtdir)
@@ -148,7 +152,7 @@ private
     end
 
     def entries(method)
-      self.send(method).collect { |qef| QueueEntry.new(qef) }
+      send(method).collect { |qef| QueueEntry.new(qef) }
     end
 
     def lock_file
