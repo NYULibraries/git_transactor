@@ -27,7 +27,7 @@ module GitTransactor
 
     def disposition(qe, result)
       valid_results = [ :pass, :fail ]
-      fail ArgumentError, "must be a QueueEntry" unless qe.is_a?(QueueEntry)
+      fail ArgumentError, 'must be a QueueEntry' unless qe.is_a?(QueueEntry)
       fail ArgumentError, "must be in #{valid_results}" unless valid_results.include?(result)
       mv_entry(qe, result)
     end
@@ -37,7 +37,7 @@ module GitTransactor
     end
 
     def lock!
-      fail LockError, "Queue is already in use." if locked?
+      fail LockError, 'Queue is already in use.' if locked?
       File.open(lock_file, 'w') { |f| f.puts($PID) }
     end
 
