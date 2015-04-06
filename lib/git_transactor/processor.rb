@@ -1,6 +1,8 @@
 require 'git'
 
 module GitTransactor
+  ##
+  # This class processes GitTransactor queue entries
   class Processor
     def initialize(params)
       @params = params
