@@ -27,8 +27,8 @@ module GitTransactor
 
     def disposition(qe, result)
       valid_results = [ :pass, :fail ]
-      raise ArgumentError.new("must be a QueueEntry") unless qe.is_a?(QueueEntry)
-      raise ArgumentError.new("must be in #{valid_results}") unless valid_results.include?(result)
+      fail ArgumentError.new("must be a QueueEntry") unless qe.is_a?(QueueEntry)
+      fail ArgumentError.new("must be in #{valid_results}") unless valid_results.include?(result)
       mv_entry(qe, result)
     end
 
