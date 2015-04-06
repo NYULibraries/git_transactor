@@ -11,7 +11,8 @@ module GitTransactor
 
       File.open(@entry_path) do |f|
         lines = f.readlines
-        fail ArgumentError.new("Too many lines in request file: #{@entry_path}") unless lines.length == 1
+        fail ArgumentError, "Too many lines in request: #{@entry_path}" unless
+          lines.length == 1
         @action, @path = lines[0].chomp.split(',',2)
         fail ArgumentError.new("Invalid action: #{@action}") unless ALLOWABLE_ACTIONS.include?(@action)
       end
