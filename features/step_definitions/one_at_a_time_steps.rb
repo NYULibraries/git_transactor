@@ -3,14 +3,6 @@ Given(/^the request queue is locked by another process$/) do
   qm.lock!
 end
 
-When(/^I try to process the request queue with a GitTransactor::Processor$/) do
-  gt = GitTransactor::Processor.new(repo_path:   @repo.path,
-                                    source_path: @src_dir.path,
-                                    work_root:   @work_root,
-                                    remote_url:  @remote_repo_path)
-  gt.process_queue
-end
-
 When(/^I try to run rake "(.*?)"$/) do |task|
   @o, @e, @s = Open3.capture3("rake #{task} LOCAL_REPO='#{@repo_path}' SOURCE_PATH='#{@src_dir.path}' QUEUE_ROOT='#{@work_root}' REMOTE_REPO_URL='#{@remote_repo_path}'")
 end
