@@ -149,7 +149,7 @@ private
     end
 
     def entries(method)
-      self.send(method).collect { |qef| QueueEntry.new(qef) }
+      send(method).collect { |qef| QueueEntry.new(qef) }
     end
 
     def lock_file
