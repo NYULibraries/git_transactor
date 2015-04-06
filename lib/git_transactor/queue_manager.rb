@@ -5,12 +5,12 @@ module GitTransactor
 
   class QueueManager
     def self.open(root)
-      self.new(root)
+      new(root)
     end
 
     def self.create(root)
-      self.create_structure(root)
-      self.new(root)
+      create_structure(root)
+      new(root)
     end
 
     def queue
