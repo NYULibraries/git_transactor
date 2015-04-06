@@ -19,7 +19,7 @@ module GitTransactor
           begin
             process_entry(qe)
             result = :pass
-          rescue Exception => e
+          rescue StandardError => e
             errors << e.message
             result = :fail
           end
