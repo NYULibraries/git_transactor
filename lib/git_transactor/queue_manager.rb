@@ -46,6 +46,7 @@ module GitTransactor
     end
 
 private
+
     QUEUE_SUBDIR  = 'queue'
     PASSED_SUBDIR = 'passed'
     FAILED_SUBDIR = 'failed'
