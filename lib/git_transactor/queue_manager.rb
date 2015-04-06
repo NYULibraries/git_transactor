@@ -27,8 +27,8 @@ module GitTransactor
 
     def disposition(qe, result)
       valid_results = [ :pass, :fail ]
-      fail ArgumentError.new("must be a QueueEntry") unless qe.is_a?(QueueEntry)
-      fail ArgumentError.new("must be in #{valid_results}") unless valid_results.include?(result)
+      fail ArgumentError, "must be a QueueEntry" unless qe.is_a?(QueueEntry)
+      fail ArgumentError, "must be in #{valid_results}" unless valid_results.include?(result)
       mv_entry(qe, result)
     end
 
@@ -37,8 +37,8 @@ module GitTransactor
     end
 
     def lock!
-      raise LockError.new("Queue is already in use.") if locked?
-      File.open(lock_file, "w") { |f| f.puts($PID) }
+      fail LockError, "Queue is already in use." if locked?
+      File.open(lock_file, 'w') { |f| f.puts($PID) }
     end
 
     def unlock
@@ -53,7 +53,7 @@ private
 
     def self.create_structure(root)
       parent = File.dirname(File.expand_path(root))
-      raise ArgumentError.new("#{parent} unwritable") unless File.writable?(parent)
+      fail ArgumentError, "#{parent} unwritable" unless File.writable?(parent)
       [root,
        File.join(root, QUEUE_SUBDIR),
        File.join(root, PASSED_SUBDIR),
@@ -70,7 +70,7 @@ private
       check_queue_dir
       check_passed_dir
       check_failed_dir
-      raise ArgumentError.new(errors) unless errors.empty?
+      fail ArgumentError, errors unless errors.empty?
     end
 
     def check_root_dir
@@ -94,7 +94,7 @@ private
     end
 
     def check_dir(path)
-      l_errors = [ ]
+      l_errors = []
       l_errors << 'does not exist' unless File.directory?(path)
       l_errors << 'unreadable'     unless File.readable?(path)
       l_errors << 'unwritable'     unless File.writable?(path)
@@ -134,7 +134,7 @@ private
       tgtdir = case result
                when :fail then failed_path
                when :pass then passed_path
-               else raise "Internal Error: invalid result: #{result}"
+               else fail "Internal Error: invalid result: #{result}"
                end
 
       FileUtils.mv(qe.entry_path, tgtdir)
