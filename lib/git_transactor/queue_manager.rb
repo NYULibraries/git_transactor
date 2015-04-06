@@ -28,7 +28,8 @@ module GitTransactor
     def disposition(qe, result)
       valid_results = [:pass, :fail]
       fail ArgumentError, 'must be a QueueEntry' unless qe.is_a?(QueueEntry)
-      fail ArgumentError, "must be in #{valid_results}" unless valid_results.include?(result)
+      fail ArgumentError, "must be in #{valid_results}" unless
+        valid_results.include?(result)
       mv_entry(qe, result)
     end
 
@@ -57,7 +58,9 @@ private
       [root,
        File.join(root, QUEUE_SUBDIR),
        File.join(root, PASSED_SUBDIR),
-       File.join(root, FAILED_SUBDIR)].each {|d| Dir.mkdir(d) unless File.directory?(d) }
+       File.join(root, FAILED_SUBDIR)].each do |d|
+        Dir.mkdir(d) unless File.directory?(d)
+      end
     end
 
     def initialize(root)
