@@ -51,7 +51,7 @@ private
       [:repo_path, :source_path, :work_root, :remote_url].each do |key|
         errors[key] = "missing #{key}:" if @params[key].nil?
       end
-      raise ArgumentError.new(errors.to_s) unless errors.empty?
+      fail ArgumentError.new(errors.to_s) unless errors.empty?
     end
 
     def process_entry(qe)
@@ -60,7 +60,7 @@ private
       when @qe.add? then process_add_entry
       when @qe.rm?  then process_rm_entry
       else
-        raise ArgumentError.new("unrecognized action: #{@qe.action}")
+        fail ArgumentError.new("unrecognized action: #{@qe.action}")
       end
     end
 
