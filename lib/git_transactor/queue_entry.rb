@@ -1,4 +1,6 @@
 module GitTransactor
+  ##
+  # class for working with Git Transactor Queue Entry files.
   class QueueEntry
     FILE_GLOB = '*.csv'
     attr_accessor :action, :path, :entry_path, :entry_name
