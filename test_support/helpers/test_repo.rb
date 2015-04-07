@@ -4,7 +4,7 @@ class TestRepo < TestDir
   attr_reader :path
 
   extend Forwardable
-  def_delegators :@g, :add, :commit, :status
+  def_delegators :@g, :add, :commit, :status, :push
 
   def init
     create_root

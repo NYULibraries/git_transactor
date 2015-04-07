@@ -83,6 +83,41 @@ module GitTransactor
         local_repo.commit('add unicorns and rainbows!')
       end
 
+      def setup_pull_state
+        # test remote repo
+        trr = TestRepo.new(remote_url, bare: true)
+        trr.nuke
+        trr.init
+
+        # clone here to capture current state of remote repo
+        td  = TestDir.new(local_repo_parent)
+        td.nuke
+        td.create_root
+
+        Git.clone(trr.path, local_repo_name, path: td.path)
+
+        # create test temp repo
+        ttd = TestDir.new(tmp_repo_parent)
+        ttd.nuke
+        ttd.create_root
+
+        # clone the remote repo to tmp repo directory
+        Git.clone(trr.path, local_repo_name, path: ttd.path)
+        ttr = TestRepo.new(tmp_repo_path)
+        ttr.open
+
+        # update the tmp repo
+        ttr.create_file('hotdog.txt', 'and mustard!')
+        ttr.add('hotdog.txt')
+        ttr.commit('add hotdog.txt')
+
+        # push to remote repo
+        ttr.push
+
+        # clean house
+        ttr.nuke
+      end
+
       def setup_locked_state
         sub_directory = 'jgp'
         src_file = "interesting-stuff.xml"
