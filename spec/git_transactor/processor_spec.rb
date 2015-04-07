@@ -159,5 +159,32 @@ module GitTransactor
         end
       end
     end
+
+    describe "#pull" do
+      context "under normal conditions" do
+        let(:tmp_repo_path)   { 'spec/fixtures/tmp_repo/blerf' }
+        let(:tmp_repo_name)   { File.basename(tmp_repo_path)   }
+        let(:tmp_repo_parent) { File.dirname(tmp_repo_path)    }
+
+        let(:local_repo_path)    { 'spec/fixtures/local_repo/blerf' }
+        let(:local_repo_name)    { File.basename(local_repo_path)   }
+        let(:local_repo_parent)  { File.dirname(local_repo_path)    }
+
+        let(:processor) { Processor.new(repo_path:   local_repo_path,
+                                        source_path: source_path,
+                                        work_root:   work_root,
+                                        remote_url:  remote_url) }
+
+        it "should synchronize the repositories" do
+          setup_pull_state
+
+          processor.pull
+          local_repo_head  = Git.ls_remote(local_repo_path)['head'][:sha]
+          remote_repo_head = Git.ls_remote(remote_url)['head'][:sha]
+
+          expect(local_repo_head).to be == remote_repo_head
+        end
+      end
+    end
   end
 end
