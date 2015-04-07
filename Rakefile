@@ -17,4 +17,12 @@ namespace :git_transactor do
     gt.process_queue
     gt.push
   end
+  desc "Pull from remote repo to local repo"
+  task :pull do
+    gt = GitTransactor::Processor.new(repo_path:   ENV["LOCAL_REPO"],
+                                      source_path: ENV["SOURCE_PATH"],
+                                      work_root:   ENV["QUEUE_ROOT"],
+                                      remote_url:  ENV["REMOTE_REPO_URL"])
+    gt.pull
+  end
 end
