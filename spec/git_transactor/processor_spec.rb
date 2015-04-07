@@ -178,7 +178,7 @@ module GitTransactor
         it "should synchronize the repositories" do
           setup_pull_state
 
-          processor.push
+          processor.pull
           local_repo_head  = Git.ls_remote(local_repo_path)['head'][:sha]
           remote_repo_head = Git.ls_remote(remote_url)['head'][:sha]
 

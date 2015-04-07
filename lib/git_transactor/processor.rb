@@ -37,6 +37,10 @@ module GitTransactor
       repo.push(remote_url)
     end
 
+    def pull
+      repo.pull
+    end
+
 private
 
     # lock queue manager during block execution
