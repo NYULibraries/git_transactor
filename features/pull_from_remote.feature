@@ -1,4 +1,4 @@
-Feature: push local repository to remote repository
+Feature: pull from remote repository to local repository
 
   As the git_transactor
   I want to pull from the remote repository to the local repository
