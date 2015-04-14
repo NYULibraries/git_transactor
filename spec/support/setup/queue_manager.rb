@@ -6,6 +6,10 @@ module GitTransactor
         tq.nuke
         tq.init
       end
+      def teardown_valid_state
+        tq = TestQueue.new(valid_root)
+        tq.nuke
+      end
       def setup_unreadable_root
         tq = TestQueue.new(unreadable_root)
         tq.nuke
