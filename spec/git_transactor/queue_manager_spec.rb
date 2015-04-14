@@ -157,56 +157,58 @@ module GitTransactor
     end
 
 
-    describe "#lock!" do
+    describe "lock-related methods" do
       before(:each) { setup_valid_state }
-      let (:qm) { GitTransactor::QueueManager.open(valid_root) }
+      after(:each)  { teardown_valid_state }
 
-      context "when the queue manager is unlocked" do
-        it "should not raise an exception" do
-          expect { qm.lock! }.to_not raise_error
+      describe "#lock!" do
+        let (:qm) { GitTransactor::QueueManager.open(valid_root) }
+
+        context "when the queue manager is unlocked" do
+          it "should not raise an exception" do
+            expect { qm.lock! }.to_not raise_error
+          end
+        end
+
+        context "when the queue manager is locked" do
+          it "should raise an exception" do
+            qm.lock!
+            expect { qm.lock! }.to raise_error(LockError)
+          end
         end
       end
 
-      context "when the queue manager is locked" do
-        it "should raise an exception" do
-          qm.lock!
-          expect { qm.lock! }.to raise_error(LockError)
+      describe "#locked?" do
+        let (:qm) { GitTransactor::QueueManager.open(valid_root) }
+
+        context "when the queue manager is unlocked" do
+          it "should return false" do
+            expect(qm).to_not be_locked
+          end
         end
-      end
-    end
 
-    describe "#locked?" do
-      before(:each) { setup_valid_state }
-      let (:qm) { GitTransactor::QueueManager.open(valid_root) }
-
-      context "when the queue manager is unlocked" do
-        it "should return false" do
-          expect(qm).to_not be_locked
-        end
-      end
-
-      context "when the queue manager is locked" do
-        it "should return true" do
-          qm.lock!
-          expect(qm).to be_locked
-        end
-      end
-    end
-
-    describe "#unlock" do
-      before(:each) { setup_valid_state }
-      let (:qm) { GitTransactor::QueueManager.open(valid_root) }
-
-      context "when the queue manager is unlocked" do
-        it "should remain unlocked" do
-          expect { qm.unlock }.not_to change{qm.locked?}
+        context "when the queue manager is locked" do
+          it "should return true" do
+            qm.lock!
+            expect(qm).to be_locked
+          end
         end
       end
 
-      context "when the queue manager is locked" do
-        it "should unlock the queue" do
-          qm.lock!
-          expect { qm.unlock }.to change{qm.locked?}.from(true).to(false)
+      describe "#unlock" do
+        let (:qm) { GitTransactor::QueueManager.open(valid_root) }
+
+        context "when the queue manager is unlocked" do
+          it "should remain unlocked" do
+            expect { qm.unlock }.not_to change{qm.locked?}
+          end
+        end
+
+        context "when the queue manager is locked" do
+          it "should unlock the queue" do
+            qm.lock!
+            expect { qm.unlock }.to change{qm.locked?}.from(true).to(false)
+          end
         end
       end
     end
