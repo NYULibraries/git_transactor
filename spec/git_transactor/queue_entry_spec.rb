@@ -87,5 +87,15 @@ module GitTransactor
         end
       end
     end
+
+    describe "to_s" do
+      context "when instantiated with a valid rm-entry file" do
+        subject(:qe) { QueueEntry.new(rm_entry) }
+        it "should be true" do
+          expect(qe.to_s).to be == 'rm-entry.csv:rm:/Users/jgp/tmp/4b3f99d8-a714-4d9c-9109-2ed5fb6d8ab4.txt'
+        end
+      end
+    end
+
   end
 end
