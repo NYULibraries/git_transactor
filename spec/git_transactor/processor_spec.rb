@@ -57,6 +57,10 @@ module GitTransactor
           g = Git.open(repo_path)
           expect(g.log[0].message).to be == 'Updating file jgp/interesting-stuff.xml'
         end
+
+        it "should have the correct log output" do
+          expect {processor.process_queue}.to output(%r{\:add\:.+jgp/interesting-stuff.xml}).to_stdout
+        end
       end
 
 
