@@ -25,6 +25,10 @@ module GitTransactor
       def rm?
         @action == 'rm'
       end
+
+      def to_s
+        "#{@entry_name}:#{@action}:#{@path}"
+      end
     end
   end
 end
