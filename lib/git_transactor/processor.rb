@@ -1,4 +1,5 @@
 require 'git'
+require 'logger'
 
 module GitTransactor
   ##
@@ -7,6 +8,7 @@ module GitTransactor
     include Utils
 
     def initialize(params)
+      logger.level = Logger::INFO
       @params = params
       check_params!
     end
@@ -23,9 +25,11 @@ module GitTransactor
             result = :pass
           rescue StandardError => e
             errors << e.message
+            logger.error("#{qe.to_s}:#{e.message}")
             result = :fail
           end
           qm.disposition(qe, result)
+          logger.info("#{result}:#{qe.to_s}")
           num_processed += 1
         end
         repo.commit(@commit_msg) unless num_processed == 0
@@ -43,6 +47,9 @@ module GitTransactor
 
 private
 
+    def logger
+      @logger ||= Logger.new($stdout)
+    end
     # lock queue manager during block execution
     def lock
       qm.lock!
