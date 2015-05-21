@@ -65,6 +65,16 @@ module GitTransactor
         tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
       end
 
+      def setup_rm_same_file_state
+        setup_rm_state
+
+        sub_directory = 'pgj'
+        file_to_rm = "spiffingly-interesting.xml"
+        file_to_rm_rel_path = File.join(sub_directory, file_to_rm)
+
+        tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
+      end
+
       def setup_push_state
         trr = TestRepo.new(remote_url, bare: true)
         trr.nuke

@@ -24,7 +24,7 @@ module GitTransactor
             process_entry(qe)
             result = :pass
           rescue StandardError => e
-            errors << e.message
+            errors[:process_queue] << e.message
             logger.error("#{qe.to_s}:#{e.message}")
             result = :fail
           end
@@ -43,6 +43,10 @@ module GitTransactor
 
     def pull
       repo.pull
+    end
+
+    def errors
+      @errors ||= Hash.new { |_errors, key| _errors[key] = [] }
     end
 
 private
@@ -123,10 +127,6 @@ private
 
     def qm
       @qm ||= QueueManager.open(work_root)
-    end
-
-    def errors
-      @errors ||= {}
     end
 
     def repo_path
