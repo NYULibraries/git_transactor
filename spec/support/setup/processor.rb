@@ -45,6 +45,14 @@ module GitTransactor
         tq.enqueue('add', File.expand_path(File.join(tsd.path, sub_directory, src_file)))
       end
 
+      def setup_add_same_file_state
+        setup_add_state
+        sub_directory = 'jgp'
+        src_file = "interesting-stuff.xml"
+
+        tq.enqueue('add', File.expand_path(File.join(tsd.path, sub_directory, src_file)))
+      end
+
       def setup_add_same_subdir_state
         setup_add_state
         setup_add_state_3
