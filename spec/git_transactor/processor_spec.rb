@@ -13,9 +13,9 @@ module GitTransactor
                                     work_root:   work_root,
                                     remote_url:  remote_url) }
 
-    let(:tr) { TestRepo.new(repo_path) }
-    let(:tq) { TestQueue.new(work_root) }
-    let(:tsd){ TestSourceDir.new(source_path) }
+    let(:tr)  { TestRepo.new(repo_path) }
+    let(:tq)  { TestQueue.new(work_root) }
+    let(:tsd) { TestSourceDir.new(source_path) }
 
     include Setup::Processor
 
@@ -24,7 +24,6 @@ module GitTransactor
       subject { processor }
       it { is_expected.to be_a(GitTransactor::Processor) }
     end
-
 
     describe '#process_queue' do
       before(:each) do
@@ -36,7 +35,6 @@ module GitTransactor
           expect(processor.process_queue).to be == 0
         end
       end
-
 
       context "with a single 'add' request in the queue" do
         before(:each) do
@@ -63,7 +61,6 @@ module GitTransactor
         end
       end
 
-
       context "with multiple 'add' requests for the same repo subdirectory in the queue" do
         before(:each) do
           setup_add_same_subdir_state
@@ -85,7 +82,6 @@ module GitTransactor
         end
       end
 
-
       context "with a single 'rm' request in the queue" do
         before(:each) do
           setup_rm_state
@@ -98,6 +94,28 @@ module GitTransactor
         it "should move the queue-entry file to the processed directory" do
           processor.process_queue
           expect(Dir.glob(File.join(work_root, 'passed','*.csv')).length).to be == 1
+        end
+
+        it "should have the correct commit message" do
+          processor.process_queue
+          g = Git.open(repo_path)
+          expect(g.log[0].message).to be == 'Deleting file pgj/spiffingly-interesting.xml'
+        end
+      end
+
+      context "with two 'rm' requests for the same file in the queue" do
+        before(:each) do
+          setup_rm_same_file_state
+        end
+
+        it "should return the correct number of entries processed" do
+          expect(processor.process_queue).to be == 2
+        end
+
+        it "should move the queue-entry file to the processed directory" do
+          processor.process_queue
+          expect(Dir.glob(File.join(work_root, 'passed','*.csv')).length).to be == 1
+          expect(Dir.glob(File.join(work_root, 'failed','*.csv')).length).to be == 1
         end
 
         it "should have the correct commit message" do
@@ -129,6 +147,28 @@ module GitTransactor
         end
       end
 
+      # it's possible that same file was uploaded twice in the same time period.
+      context "with two 'add' requests for the same file in the queue" do
+        before(:each) do
+          setup_add_same_file_state
+        end
+
+        it "should return the correct number of entries processed" do
+          expect(processor.process_queue).to be == 2
+        end
+
+        it "should move the queue-entry file to the processed directory" do
+          processor.process_queue
+          expect(Dir.glob(File.join(work_root, 'passed','*.csv')).length).to be == 2
+          expect(Dir.glob(File.join(work_root, 'failed','*.csv')).length).to be == 0
+        end
+
+        it "should have the correct commit message" do
+          processor.process_queue
+          g = Git.open(repo_path)
+          expect(g.log[0].message).to be == 'Updating file jgp/interesting-stuff.xml, Updating file jgp/interesting-stuff.xml'
+        end
+      end
 
       context "with a locked queue" do
         before(:each) do
