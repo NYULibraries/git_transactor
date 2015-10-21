@@ -57,9 +57,11 @@ Then(/^I should see "(.*?)" in the repository$/) do |rel_path|
 end
 
 Given(/^the file "(.*?)" exists in the repository$/) do |rel_path|
-  subdir = rel_path.split('/')[0]
+  subdir, filename = rel_path.split('/')
+  eadid = File.basename(filename,File.extname(filename))
+  ead = TestEad.new(eadid)
   @repo.create_sub_directory(subdir)
-  @repo.create_file(rel_path, "#{rel_path}")
+  @repo.create_file(rel_path, ead)
 
   g = Git.open(@repo.path)
   g.add(rel_path)
