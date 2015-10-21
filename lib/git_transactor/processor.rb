@@ -89,6 +89,7 @@ private
     end
 
     def process_rm_entry
+      eadid
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
     end
@@ -114,7 +115,7 @@ private
     end
 
     def update_commit_msg_for_rm_entry
-      @commit_msg += (delimiter + "Deleting file #{file_rel_path}")
+      @commit_msg += (delimiter + "Deleting file #{file_rel_path} EADID='#{eadid}'")
     end
 
     def delimiter
@@ -177,6 +178,10 @@ private
     #
     def file_tgt_path
       File.join(repo_path, file_rel_path)
+    end
+
+    def eadid
+      @eadid ||= GitTransactor::EAD.new(file_tgt_path).eadid
     end
   end
 end

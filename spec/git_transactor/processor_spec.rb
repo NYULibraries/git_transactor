@@ -99,7 +99,7 @@ module GitTransactor
         it "should have the correct commit message" do
           processor.process_queue
           g = Git.open(repo_path)
-          expect(g.log[0].message).to be == 'Deleting file pgj/spiffingly-interesting.xml'
+          expect(g.log[0].message).to be == "Deleting file pgj/spiffingly-interesting.xml EADID='spiffingly-interesting'"
         end
       end
 
@@ -121,7 +121,7 @@ module GitTransactor
         it "should have the correct commit message" do
           processor.process_queue
           g = Git.open(repo_path)
-          expect(g.log[0].message).to be == 'Deleting file pgj/spiffingly-interesting.xml'
+          expect(g.log[0].message).to be == "Deleting file pgj/spiffingly-interesting.xml EADID='spiffingly-interesting'"
         end
       end
 
