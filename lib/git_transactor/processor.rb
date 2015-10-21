@@ -46,7 +46,7 @@ module GitTransactor
     end
 
     def errors
-      @errors ||= Hash.new { |_errors, key| _errors[key] = [] }
+      @errors ||= Hash.new { |perrors, key| perrors[key] = [] }
     end
 
 private
