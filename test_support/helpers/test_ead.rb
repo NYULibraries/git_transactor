@@ -1,4 +1,4 @@
-class TestEad
+class TestEAD
 
   attr_reader :eadid
 

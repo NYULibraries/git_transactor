@@ -6,7 +6,7 @@ module GitTransactor
         tr = TestRepo.new(repo_path)
         tr.nuke
         tr.init
-        ead = TestEad.new('foo')
+        ead = TestEAD.new('foo')
         tr.create_file('foo.txt', ead)
         tr.add('foo.txt')
         tr.commit('Initial commit')
@@ -62,7 +62,7 @@ module GitTransactor
       def setup_rm_state
         sub_directory = 'pgj'
         eadid = 'spiffingly-interesting'
-        ead = TestEad.new(eadid)
+        ead = TestEAD.new(eadid)
 
         file_to_rm = "#{eadid}.xml"
         file_to_rm_rel_path = File.join(sub_directory, file_to_rm)

@@ -59,7 +59,7 @@ end
 Given(/^the file "(.*?)" exists in the repository$/) do |rel_path|
   subdir, filename = rel_path.split('/')
   eadid = File.basename(filename,File.extname(filename))
-  ead = TestEad.new(eadid)
+  ead = TestEAD.new(eadid)
   @repo.create_sub_directory(subdir)
   @repo.create_file(rel_path, ead)
 
