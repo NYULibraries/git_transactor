@@ -89,7 +89,7 @@ private
     end
 
     def process_rm_entry
-      eadid
+      extract_eadid
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
     end
@@ -180,8 +180,12 @@ private
       File.join(repo_path, file_rel_path)
     end
 
+    def extract_eadid
+      @eadid = GitTransactor::EAD.new(file_tgt_path).eadid
+    end
+
     def eadid
-      @eadid ||= GitTransactor::EAD.new(file_tgt_path).eadid
+      @eadid
     end
   end
 end
