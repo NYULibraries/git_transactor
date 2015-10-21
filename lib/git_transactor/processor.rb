@@ -25,11 +25,11 @@ module GitTransactor
             result = :pass
           rescue StandardError => e
             errors[:process_queue] << e.message
-            logger.error("#{qe.to_s}:#{e.message}")
+            logger.error("#{qe}:#{e.message}")
             result = :fail
           end
           qm.disposition(qe, result)
-          logger.info("#{result}:#{qe.to_s}")
+          logger.info("#{result}:#{qe}")
           num_processed += 1
         end
         repo.commit(@commit_msg) unless num_processed == 0
