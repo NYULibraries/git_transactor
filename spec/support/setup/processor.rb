@@ -6,7 +6,8 @@ module GitTransactor
         tr = TestRepo.new(repo_path)
         tr.nuke
         tr.init
-        tr.create_file('foo.txt','foo.txt')
+        ead = TestEad.new('foo')
+        tr.create_file('foo.txt', ead)
         tr.add('foo.txt')
         tr.commit('Initial commit')
 
