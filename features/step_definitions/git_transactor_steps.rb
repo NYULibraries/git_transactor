@@ -16,7 +16,6 @@ Given(/^a source\-file directory exists$/) do
   @src_dir.init
 end
 
-
 When(/^I process the queue$/) do
   gt = GitTransactor::Processor.new(repo_path:   @repo.path,
                                source_path: @src_dir.path,
