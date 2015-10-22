@@ -125,6 +125,28 @@ module GitTransactor
         end
       end
 
+      context "with an add request and an 'rm' request for an ead without an EADID in the queue" do
+        before(:each) do
+          setup_rm_bad_eadid_state
+        end
+
+        it "should return the correct number of entries processed" do
+          expect(processor.process_queue).to be == 2
+        end
+
+        it "should move the queue-entry file to the failed processed directory" do
+          processor.process_queue
+          expect(Dir.glob(File.join(work_root, 'passed','*.csv')).length).to be == 1
+          expect(Dir.glob(File.join(work_root, 'failed','*.csv')).length).to be == 1
+        end
+
+        it "should have the correct commit message" do
+          processor.process_queue
+          g = Git.open(repo_path)
+          expect(g.log[0].message).to be == "Updating file jgp/interesting-stuff.xml"
+        end
+      end
+
       context "with two 'add' requests in the queue" do
         before(:each) do
           setup_add_state

@@ -87,6 +87,26 @@ module GitTransactor
         tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
       end
 
+      def setup_rm_bad_eadid_state
+        setup_add_state
+
+        sub_directory = 'pgj'
+        eadid = 'spiffingly-interesting'
+        ead = TestEAD.new('')
+
+        file_to_rm = "#{eadid}.xml"
+        file_to_rm_rel_path = File.join(sub_directory, file_to_rm)
+
+        tr.create_sub_directory(sub_directory)
+        tr.create_file(file_to_rm_rel_path, ead)
+
+        g = Git.open(repo_path)
+        g.add(file_to_rm_rel_path)
+        g.commit('add test file')
+
+        tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
+      end
+
       def setup_push_state
         trr = TestRepo.new(remote_url, bare: true)
         trr.nuke
