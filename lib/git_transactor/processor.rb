@@ -89,6 +89,8 @@ private
     end
 
     def process_rm_entry
+      # ORDER MATTERS HERE!
+      # you must capture the EADID from the EAD file before you delete it.
       extract_eadid!
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
