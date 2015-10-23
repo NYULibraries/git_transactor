@@ -16,12 +16,11 @@ Given(/^a source\-file directory exists$/) do
   @src_dir.init
 end
 
-
 When(/^I process the queue$/) do
   gt = GitTransactor::Processor.new(repo_path:   @repo.path,
-                               source_path: @src_dir.path,
-                               work_root:   @work_root,
-                               remote_url:  @remote_repo_path)
+                                    source_path: @src_dir.path,
+                                    work_root:   @work_root,
+                                    remote_url:  @remote_repo_path)
   gt.process_queue
 end
 
@@ -58,9 +57,11 @@ Then(/^I should see "(.*?)" in the repository$/) do |rel_path|
 end
 
 Given(/^the file "(.*?)" exists in the repository$/) do |rel_path|
-  subdir = rel_path.split('/')[0]
+  subdir, filename = rel_path.split('/')
+  eadid = File.basename(filename,File.extname(filename))
+  ead = TestEAD.new(eadid)
   @repo.create_sub_directory(subdir)
-  @repo.create_file(rel_path, "#{rel_path}")
+  @repo.create_file(rel_path, ead)
 
   g = Git.open(@repo.path)
   g.add(rel_path)

@@ -25,11 +25,11 @@ module GitTransactor
             result = :pass
           rescue StandardError => e
             errors[:process_queue] << e.message
-            logger.error("#{qe.to_s}:#{e.message}")
+            logger.error("#{qe}:#{e.message}")
             result = :fail
           end
           qm.disposition(qe, result)
-          logger.info("#{result}:#{qe.to_s}")
+          logger.info("#{result}:#{qe}")
           num_processed += 1
         end
         repo.commit(@commit_msg) unless num_processed == 0
@@ -46,7 +46,7 @@ module GitTransactor
     end
 
     def errors
-      @errors ||= Hash.new { |_errors, key| _errors[key] = [] }
+      @errors ||= Hash.new { |perrors, key| perrors[key] = [] }
     end
 
 private
@@ -89,6 +89,9 @@ private
     end
 
     def process_rm_entry
+      # ORDER MATTERS HERE!
+      # you must capture the EADID from the EAD file before you delete it.
+      extract_eadid!
       git_rm_file_from_repo
       update_commit_msg_for_rm_entry
     end
@@ -114,7 +117,7 @@ private
     end
 
     def update_commit_msg_for_rm_entry
-      @commit_msg += (delimiter + "Deleting file #{file_rel_path}")
+      @commit_msg += (delimiter + "Deleting file #{file_rel_path} EADID='#{eadid}'")
     end
 
     def delimiter
@@ -177,6 +180,15 @@ private
     #
     def file_tgt_path
       File.join(repo_path, file_rel_path)
+    end
+
+    def extract_eadid!
+      @eadid = GitTransactor::EAD.new(file_tgt_path).eadid
+      raise ArgumentError.new("Empty EADID in #{file_tgt_path}") if eadid.strip.empty?
+    end
+
+    def eadid
+      @eadid
     end
   end
 end
