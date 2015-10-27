@@ -27,5 +27,5 @@ Feature: pull from remote repo, process queue, and push using a Rake task
     When  I execute the pull, process, and push Rake task
     Then  I should see "foo/bar.txt" in the repository
     And   I should see "baz/quux.txt" in the repository
-    And   I should see "Updating file foo/bar.txt, Deleting file circle/square.txt, Updating file baz/quux.txt, Deleting file triangle/rhombus.txt" in the commit log
+    And   I should see "Updating file foo/bar.txt, Deleting file circle/square.txt EADID='square', Updating file baz/quux.txt, Deleting file triangle/rhombus.txt EADID='rhombus'" in the commit log
     And   the local repository and the remote repository should be in the same state

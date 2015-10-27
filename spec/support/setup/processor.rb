@@ -6,7 +6,8 @@ module GitTransactor
         tr = TestRepo.new(repo_path)
         tr.nuke
         tr.init
-        tr.create_file('foo.txt','foo.txt')
+        ead = TestEAD.new('foo')
+        tr.create_file('foo.txt', ead)
         tr.add('foo.txt')
         tr.commit('Initial commit')
 
@@ -60,15 +61,18 @@ module GitTransactor
 
       def setup_rm_state
         sub_directory = 'pgj'
-        file_to_rm = "spiffingly-interesting.xml"
+        eadid = 'spiffingly-interesting'
+        ead = TestEAD.new(eadid)
+
+        file_to_rm = "#{eadid}.xml"
         file_to_rm_rel_path = File.join(sub_directory, file_to_rm)
 
         tr.create_sub_directory(sub_directory)
-        tr.create_file(file_to_rm_rel_path, "#{file_to_rm}")
+        tr.create_file(file_to_rm_rel_path, ead)
 
         g = Git.open(repo_path)
         g.add(file_to_rm_rel_path)
-        g.commit("add test file")
+        g.commit('add test file')
 
         tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
       end
@@ -77,8 +81,28 @@ module GitTransactor
         setup_rm_state
 
         sub_directory = 'pgj'
-        file_to_rm = "spiffingly-interesting.xml"
+        file_to_rm = 'spiffingly-interesting.xml'
         file_to_rm_rel_path = File.join(sub_directory, file_to_rm)
+
+        tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
+      end
+
+      def setup_rm_bad_eadid_state
+        setup_add_state
+
+        sub_directory = 'pgj'
+        eadid = 'spiffingly-interesting'
+        ead = TestEAD.new('')
+
+        file_to_rm = "#{eadid}.xml"
+        file_to_rm_rel_path = File.join(sub_directory, file_to_rm)
+
+        tr.create_sub_directory(sub_directory)
+        tr.create_file(file_to_rm_rel_path, ead)
+
+        g = Git.open(repo_path)
+        g.add(file_to_rm_rel_path)
+        g.commit('add test file')
 
         tq.enqueue('rm', File.expand_path(File.join(source_path, file_to_rm_rel_path)))
       end

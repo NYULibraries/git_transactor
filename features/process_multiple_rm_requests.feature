@@ -15,4 +15,4 @@ Feature: process multiple rm-file requests
     When  I process the queue
     Then  the file "foo/bar.txt" does not exist in the repository
     And   the file "baz/quux.txt" does not exist in the repository
-    And   I should see "Deleting file foo/bar.txt, Deleting file baz/quux.txt" in the commit log
+    And   I should see "Deleting file foo/bar.txt EADID='bar', Deleting file baz/quux.txt EADID='quux'" in the commit log

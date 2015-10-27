@@ -12,4 +12,4 @@ Feature: process rm-file-request
     And   there is an "rm" request for "pumpkin/pie.txt" in the queue
     When  I process the queue
     Then  the file "pumpkin/pie.txt" does not exist in the repository
-    And   I should see "Deleting file pumpkin/pie.txt" in the commit log
+    And   I should see "Deleting file pumpkin/pie.txt EADID='pie'" in the commit log

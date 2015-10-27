@@ -21,4 +21,4 @@ Feature: process multiple add-file and rm-file requests
     And   the file "circle/square.txt" does not exist in the repository
     And   I should see "baz/quux.txt" in the repository
     And   the file "triangle/rhombus.txt" does not exist in the repository
-    And   I should see "Updating file foo/bar.txt, Deleting file circle/square.txt, Updating file baz/quux.txt, Deleting file triangle/rhombus.txt" in the commit log
+    And   I should see "Updating file foo/bar.txt, Deleting file circle/square.txt EADID='square', Updating file baz/quux.txt, Deleting file triangle/rhombus.txt EADID='rhombus'" in the commit log
