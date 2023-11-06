@@ -74,7 +74,7 @@ module GitTransactor
         end
       end
 
-      context "when parent directory is unwritabe" do
+      context "when parent directory is unwritable" do
         before(:each) { setup_invalid_create }
         after(:each)  { teardown_invalid_create }
         it "raises an ArgumentError" do
