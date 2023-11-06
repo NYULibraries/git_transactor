@@ -36,11 +36,11 @@ The following environment variables must be set when running a `git_transactor`
 `rake` task:
 
 ```
-LOCAL_REPO       # the path to the local repository
-SOURCE_PATH      # the path to the directory from which to copy files
-QUEUE_ROOT       # the path to the queue directory structure created via
-                 #   rake git_transactor:setup_queue task
-REMOTE_REPO_URL  # the remote repository URL
+GT_LOCAL_REPO       # the path to the local EAD repository
+GT_SOURCE_PATH      # the path to the directory from which to copy EAD files
+GT_QUEUE_ROOT       # the path to the Git Transactor queue directory structure created via
+                    #   rake git_transactor:setup_queue task
+GT_REMOTE_REPO_URL  # the remote repository URL
 
 e.g.,
 rake git_transactor:pull_process_push LOCAL_REPO='./super_duper_files' \
